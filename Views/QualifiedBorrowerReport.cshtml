@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="./styles.css"> -->
+
     <style>
         .main-table {
             width: 900px;
@@ -74,7 +74,7 @@
                                 Borrower Report
                             </p>
                             <p style="margin:0;letter-spacing:1px;font-size:25px;color:#000;font-weight:600;font-family: 'Roboto', sans-serif;">
-                                {Name}
+                                @Model.consumer?.firstName @Model.consumer?.lastName
                             </p>
                         </td>
                         <td align="center" style="width:50%;padding:20px 0 20px 10px;text-align:left;">
@@ -92,7 +92,7 @@
                                         Report Date
                                     </td>
                                     <td style="padding:8px 0 5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
-                                        {ReportDate}
+                                        09/05/2023
                                     </td>
                                 </tr>
                                 <tr>
@@ -100,7 +100,7 @@
                                         Email
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
-                                        {Email}
+                                        @Model.consumer?.email
                                     </td>
                                 </tr>
                                 <tr>
@@ -108,7 +108,7 @@
                                         Phone Number
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
-                                        {PhoneNumber}
+                                        @Model.consumer?.phoneNumber
                                     </td>
                                 </tr>
                                 <tr>
@@ -116,10 +116,10 @@
                                         Address
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
-                                        {Street}
-                                        {Street2}
-                                        {City}, {Region}
-                                        {Country}, {PostalCode}
+                                        @Model.consumer?.address?.street
+                                        @Model.consumer?.address?.street2
+                                        @Model.consumer?.address?.city, @Model.consumer?.address?.region
+                                        @Model.consumer?.address?.country, @Model.consumer?.address?.postalCode
                                     </td>
                                 </tr>
                             </table>
@@ -149,7 +149,7 @@
                                     </td>
                                     <td style="padding:8px 0 5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
                                         <p style="">
-                                            {RikiIndex}
+                                            @Model.rikiData?.riki
                                         </p>
                                     </td>
                                 </tr>
@@ -160,7 +160,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
                                         <p>
-                                            {RikiTrend}
+                                            @Model.rikiData?.rikIasWords
                                         </p>
                                     </td>
                                 </tr>
@@ -172,7 +172,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;">
                                         <p>
-                                            {CashFlowIndex}
+                                            @Model.rikiData?.cashFlowIndex
                                         </p>
                                     </td>
                                 </tr>
@@ -182,7 +182,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
                                         <p>
-                                            {CashFlowIndexTrend}
+                                            @Model.rikiData?.cashFlowIndexTrend
                                         </p>
                                     </td>
                                 </tr>
@@ -192,7 +192,7 @@
                                     </td>
                                     <td style="font-family: 'Roboto', sans-serif;padding:5px 0;font-size:13px;">
                                         <p>
-                                            {FICOScore}
+                                            720
                                         </p>
                                     </td>
                                 </tr>
@@ -213,7 +213,7 @@
                                     </td>
                                     <td style="padding:8px 0 5px 0;font-size:13px;font-family: 'Roboto', sans-serif;">
                                         <p style="font-family: 'Roboto', sans-serif;margin:0;border:1px solid #ddd;padding:5px 10px;text-align:right;border-radius:4px;">
-                                            $ {TypicalMonthlyIncome}
+                                            $ @Model.rikiData?.typicalMonthsTotalIncome
                                         </p>
                                     </td>
                                 </tr>
@@ -223,7 +223,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;">
                                         <p style="font-family: 'Roboto', sans-serif;margin:0;border:1px solid #ddd;padding:5px 10px;text-align:right;border-radius:4px;">
-                                            ($ {TypicalMonthlyResidualIncome})
+                                            ($ @Model.rikiData?.typicalMonthsAdjustedAvailableIncome)
                                         </p>
                                     </td>
                                 </tr>
@@ -235,7 +235,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;">
                                         <p style="font-family: 'Roboto', sans-serif;margin:0;border:1px solid #ddd;padding:5px 10px;text-align:right;border-radius:4px;">
-                                            $ {HousingAbilitytoPay}
+                                            $ 3,192.03
                                         </p>
                                     </td>
                                 </tr>
@@ -246,7 +246,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;">
                                         <p style="font-family: 'Roboto', sans-serif;margin:0;border:1px solid #ddd;padding:5px 10px;text-align:right;border-radius:4px;">
-                                            {Month-to-MonthStabilityScore}
+                                            @Model.rikiData?.monthToMonthStabilityScore
                                         </p>
                                     </td>
                                 </tr>
@@ -257,7 +257,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size:13px;">
                                         <p style="font-family: 'Roboto', sans-serif;white-space:normal;margin:0;border:1px solid #ddd;padding:5px 10px;text-align:right;border-radius:4px;">
-                                            {MonthlyIncomeTrend}
+                                            @Model.rikiData?.totalMonthlyIncomeTrend
                                         </p>
                                     </td>
                                 </tr>
@@ -427,78 +427,36 @@
                                     <th style="font-family: 'Roboto', sans-serif;text-align:left;font-weight:500;border-radius:4px;padding:5px 10px;
                                 background-color:#919191;color:#fff;font-size:13px;">Amount</th>
                                 </tr>
-                                <tr>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                                    border:1px solid #ddd;padding:5px 10px;">
-                                        08/25/2022
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        Capital One
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        BANK OF AMERICA, N.A.
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        $ 248.25
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                                    border:1px solid #ddd;padding:5px 10px;">
-                                        08/25/2022
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        Capital One
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        BANK OF AMERICA, N.A.
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        $ 248.25
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                                    border:1px solid #ddd;padding:5px 10px;">
-                                        08/25/2022
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        Capital One
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        BANK OF AMERICA, N.A.
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        $ 248.25
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                                    border:1px solid #ddd;padding:5px 10px;">
-                                        08/25/2022
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        Capital One
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        BANK OF AMERICA, N.A.
-                                    </td>
-                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
-                                        $ 248.25
-                                    </td>
-                                </tr>
+                                @if(@Model.groupedTransactions != null && @Model.groupedTransactions.Count != 0){
+                                    @foreach (var grouptransaction in @Model.groupedTransactions){
+                                        @if(@grouptransaction.groupedAccountData != null && @grouptransaction.groupedAccountData.Count != 0){
+                                            @foreach (var groupaccountdata in grouptransaction.groupedAccountData){
+                                                @if (@groupaccountdata.transactions != null && @groupaccountdata.transactions.Count != 0){
+                                                    @foreach (var transaction in @groupaccountdata.transactions){
+                                                        <tr>
+                                                 <td style=""font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                    border:1px solid #ddd;padding:5px 10px;"">
+                                                        @transaction.date.ToShortDateString()
+                                                    </td>
+                                                    <td style=""font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                            border:1px solid #ddd;padding:5px 10px;"">
+                                                        @groupaccountdata.accountType
+                                                    </td>
+                                                    <td style=""font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                            border:1px solid #ddd;padding:5px 10px;"">
+                                                        @transaction.description
+                                                    </td>
+                                                    <td style=""font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                            border:1px solid #ddd;padding:5px 10px;"">
+                                                        $ @transaction.amount
+                                                    </td>
+                                                </tr>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             </table>
                         </td>
                     </tr>

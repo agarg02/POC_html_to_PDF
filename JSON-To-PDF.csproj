@@ -5,15 +5,25 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>JSON_To_PDF</RootNamespace>
+		  <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\QualifiedBorrowerReport.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PuppeteerSharp" Version="10.1.2" />
+    <PackageReference Include="RazorLight" Version="2.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Pdf-Report\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\QualifiedBorrowerReport.cshtml" />
   </ItemGroup>
 
 </Project>

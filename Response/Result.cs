@@ -1,5 +1,4 @@
-﻿using static JSON_To_PDF.Model.JsonToPdf;
-
+﻿
 namespace JSON_To_PDF.Response
 {
     public class Result

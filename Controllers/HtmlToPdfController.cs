@@ -1,10 +1,10 @@
-﻿using JSON_To_PDF.Repository.Interfaces;
+﻿using JSON_To_PDF.Model;
+using JSON_To_PDF.Repository.Interfaces;
 using JSON_To_PDF.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
 using System.Net;
-using static JSON_To_PDF.Model.JsonToPdf;
 using static JSON_To_PDF.Response.Result;
 
 namespace JSON_To_PDF.Controllers
@@ -24,9 +24,9 @@ namespace JSON_To_PDF.Controllers
         /// <summary>
         /// generate pdf from json data using Html file
         /// </summary>
-        /// <param name="definition" type="Definitions"></param>
+        /// <param name="rikiResult" type="RikiResultSet"></param>
         [HttpPost]
-        public async Task<IActionResult> GeneratePdf(Definitions definition)
+        public async Task<IActionResult> GeneratePdf(RikiResultSet rikiResult)
         {
             ErrorResponse errorResponse;
             ResultResponse result = new ResultResponse();
@@ -39,7 +39,7 @@ namespace JSON_To_PDF.Controllers
                     Headless = true
                 });
 
-                var generatedData = _htmltopdfRepository.GeneratePdfFromModel(definition, browser);
+                var generatedData = _htmltopdfRepository.GeneratePdfFromModel(rikiResult, browser);
 
                 if (generatedData != null && generatedData.Result != null)  
                 {
