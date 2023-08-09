@@ -32,14 +32,7 @@ namespace JSON_To_PDF.Controllers
             ResultResponse result = new ResultResponse();
             try
             {
-                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
-
-                var browser = await Puppeteer.LaunchAsync(new LaunchOptions
-                {
-                    Headless = true
-                });
-
-                var generatedData = _htmltopdfRepository.GeneratePdfFromModel(rikiResult, browser);
+                var generatedData = _htmltopdfRepository.GeneratePdfFromModel(rikiResult);
 
                 if (generatedData != null && generatedData.Result != null)  
                 {

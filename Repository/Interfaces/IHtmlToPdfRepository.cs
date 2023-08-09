@@ -7,7 +7,7 @@ namespace JSON_To_PDF.Repository.Interfaces
 {
     public interface IHtmlToPdfRepository
     {
-        public Task<ResultResponse> GeneratePdfFromModel(RikiResultSet rikiResult, IBrowser browser);
+        public Task<ResultResponse> GeneratePdfFromModel(RikiResultSet rikiResult);
 
     }
 }

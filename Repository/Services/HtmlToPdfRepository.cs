@@ -21,7 +21,7 @@ namespace JSON_To_PDF.Repository.Services
         }
 
         #region main calling unit
-        public async Task<ResultResponse> GeneratePdfFromModel(RikiResultSet rikiResult, IBrowser browser)
+        public async Task<ResultResponse> GeneratePdfFromModel(RikiResultSet rikiResult)
         {
             ResultResponse result = new ResultResponse();
             try
@@ -33,7 +33,7 @@ namespace JSON_To_PDF.Repository.Services
                     var readHtml = await ReadLocalFileAsync(filePath);
 
                     string htmlCode = PopulateHtmlWithDynamicValues(readHtml, rikiResult);
-                    var convertedInByte =  await ConvertHtmlToPdf(htmlCode, browser);
+                    var convertedInByte =  await ConvertHtmlToPdf(htmlCode);
 
                     if (convertedInByte != null && convertedInByte.Status)
                     {
@@ -70,11 +70,19 @@ namespace JSON_To_PDF.Repository.Services
 
 
         #region convert html code to pdf
-            private async Task<ResultResponse> ConvertHtmlToPdf(string htmlCode, IBrowser browser)
+            private async Task<ResultResponse> ConvertHtmlToPdf(string htmlCode)
         {
             ResultResponse result = new ResultResponse();
             try
             {
+
+                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+
+                var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                {
+                    Headless = true
+                });
+
                 var page = await browser.NewPageAsync();
 
                 await page.SetContentAsync(htmlCode);
