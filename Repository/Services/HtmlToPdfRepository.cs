@@ -4,6 +4,7 @@ using JSON_To_PDF.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
 using RazorLight;
+using System.IO;
 using System.Net;
 using static JSON_To_PDF.Response.Result;
 
@@ -26,18 +27,36 @@ namespace JSON_To_PDF.Repository.Services
             ResultResponse result = new ResultResponse();
             try
             {               
-
                 if (rikiResult != null)
                 {
-                    string filePath = @"Views/QualifiedBorrowerReport.html";
-                    var readHtml = await ReadLocalFileAsync(filePath);
+                    //string filePath = "QualifiedBorrowerReport.cshtml";
 
-                    string htmlCode = PopulateHtmlWithDynamicValues(readHtml, rikiResult);
-                    var convertedInByte =  await ConvertHtmlToPdf(htmlCode);
+                    String[] File_Paths = new string[] { "QualifiedBorrowerReport.cshtml", "RikiReport.cshtml" };
 
-                    if (convertedInByte != null && convertedInByte.Status)
+                    foreach (var filepath in File_Paths)
                     {
-                        result.PdfInByte = convertedInByte.PdfInByte;
+
+                        string htmlCode = PopulateHtmlWithDynamicValues(filepath, rikiResult);
+                        var convertedInByte = await ConvertHtmlToPdf(htmlCode);
+
+                        if (convertedInByte != null && convertedInByte.Status && convertedInByte.PdfInByte != null)
+                        {
+                            result.PdfInByte = convertedInByte.PdfInByte;
+
+                            //to save data to desktop folder directly
+                            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //get the desktop path
+                            string outputPath = Path.Combine(desktopPath, "Reports"); // Add subfolder on the desktop
+                            string fetchFileNameFromfilepath = System.IO.Path.GetFileNameWithoutExtension(filepath);
+                            string outputFilePath = Path.Combine(outputPath, fetchFileNameFromfilepath + DateTime.Now.ToString("dd-H.mmtt") + ".pdf");
+
+                            Directory.CreateDirectory(outputPath); // Create the output directory if it doesn't exist
+                                                                   //to save data to desktop folder directly
+
+                            File.WriteAllBytes(outputFilePath, convertedInByte.PdfInByte);
+
+                            Console.WriteLine("PDF saved successfully.");
+
+                        }
                     }
                 }
             }
@@ -53,11 +72,11 @@ namespace JSON_To_PDF.Repository.Services
 
         #region populate dynamic value to html
 
-        private string PopulateHtmlWithDynamicValues(string templatePath, RikiResultSet model)
+        private string PopulateHtmlWithDynamicValues(string filePath, RikiResultSet model)
         {
             try
             {
-                var result = _razorLightEngine.CompileRenderAsync("QualifiedBorrowerReport.cshtml", model).GetAwaiter().GetResult();
+                var result = _razorLightEngine.CompileRenderAsync(filePath, model).GetAwaiter().GetResult();
                 return result;
 
             }
@@ -91,6 +110,9 @@ namespace JSON_To_PDF.Repository.Services
                 {
                     Format = PuppeteerSharp.Media.PaperFormat.A3,
                     PrintBackground = true,
+                    DisplayHeaderFooter = true,
+                    HeaderTemplate = "<div style='font-size: 10px; text-align: center;'>Your Header Content</div>",
+
                 };
 
                 var pdfData = await page.PdfDataAsync(pdfOptions);
@@ -110,28 +132,6 @@ namespace JSON_To_PDF.Repository.Services
         }
         #endregion
 
-
-        #region Read Local File and pass to stream reader
-        public static async Task<string> ReadLocalFileAsync(string filePath)
-        {
-            try
-            {
-                string fileContent;
-
-                using (var reader = new StreamReader(filePath))
-                {
-                    fileContent = await reader.ReadToEndAsync();
-                }
-
-                return fileContent; 
-            }
-            catch(Exception ex) 
-            {   
-                Console.WriteLine(ex.Message);
-                return ex.Message;
-            }
-        }
-        #endregion
 
     }
 }

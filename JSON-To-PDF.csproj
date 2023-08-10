@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Content Remove="Views\QualifiedBorrowerReport.cshtml" />
+    <Content Remove="Views\RikiReport.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <None Include="Views\QualifiedBorrowerReport.cshtml" />
+    <None Include="Views\RikiReport.cshtml" />
   </ItemGroup>
 
 </Project>

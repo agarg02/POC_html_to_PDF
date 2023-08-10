@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
+
 namespace JSON_To_PDF.Response
 {
     public class Result
@@ -8,6 +10,7 @@ namespace JSON_To_PDF.Response
             public bool Status { get; set; }
             public string? Message { get; set; }
             public byte[]? PdfInByte { get; set; }
+
         }
         public class Data
         {
