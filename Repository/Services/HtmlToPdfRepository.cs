@@ -29,7 +29,6 @@ namespace JSON_To_PDF.Repository.Services
             {               
                 if (rikiResult != null)
                 {
-                    //string filePath = "QualifiedBorrowerReport.cshtml";
 
                     String[] File_Paths = new string[] { "QualifiedBorrowerReport.cshtml", "RikiReport.cshtml" };
 
@@ -90,7 +89,7 @@ namespace JSON_To_PDF.Repository.Services
 
         #region convert html code to pdf
             private async Task<ResultResponse> ConvertHtmlToPdf(string htmlCode)
-        {
+            {
             ResultResponse result = new ResultResponse();
             try
             {
@@ -106,13 +105,20 @@ namespace JSON_To_PDF.Repository.Services
 
                 await page.SetContentAsync(htmlCode);
 
-                var pdfOptions = new PdfOptions
+                var pdfOptions = new PdfOptions 
                 {
-                    Format = PuppeteerSharp.Media.PaperFormat.A3,
+                    Format = PuppeteerSharp.Media.PaperFormat.A4, 
                     PrintBackground = true,
+                    HeaderTemplate = @"<span style='font-size: 30px;background-color: white;color: black;text-align: center;
+                    margin: 0 auto; position: relative;'></span>",
                     DisplayHeaderFooter = true,
-                    HeaderTemplate = "<div style='font-size: 10px; text-align: center;'>Your Header Content</div>",
-
+                    MarginOptions =
+                    {
+                      Top= "40px",
+                      Bottom= "0px",
+                      Left="0px",
+                      Right="0px",
+                    }
                 };
 
                 var pdfData = await page.PdfDataAsync(pdfOptions);
@@ -129,8 +135,8 @@ namespace JSON_To_PDF.Repository.Services
                 result.Status = false;
             }
             return result;
-        }
-        #endregion
+            }
+            #endregion
 
 
     }
