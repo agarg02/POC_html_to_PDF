@@ -35,7 +35,18 @@ namespace JSON_To_PDF.Repository.Services
                     foreach (var filepath in File_Paths)
                     {
 
-                        string htmlCode = PopulateHtmlWithDynamicValues(filepath, rikiResult);
+                        // to read file and return html string
+
+                        string htmlContent;
+
+                        using (var reader = new StreamReader(@"Views/QualifiedBorrowerReport.cshtml"))
+                        {
+                            htmlContent = await reader.ReadToEndAsync();
+                        }
+
+                        //to read file and return html string
+
+                        string htmlCode = PopulateHtmlWithDynamicValues(htmlContent, rikiResult);
                         var convertedInByte = await ConvertHtmlToPdf(htmlCode);
 
                         if (convertedInByte != null && convertedInByte.Status && convertedInByte.PdfInByte != null)
@@ -71,11 +82,20 @@ namespace JSON_To_PDF.Repository.Services
 
         #region populate dynamic value to html
 
-        private string PopulateHtmlWithDynamicValues(string filePath, RikiResultSet model)
+        private string PopulateHtmlWithDynamicValues(string htmlContent, RikiResultSet model)
         {
             try
             {
-                var result = _razorLightEngine.CompileRenderAsync(filePath, model).GetAwaiter().GetResult();
+                //var result = _razorLightEngine.CompileRenderAsync(filePath, model).GetAwaiter().GetResult();
+
+                //testing with html
+
+                string templateKey = "myUniqueTemplateKey" + DateTime.Now.ToString("dd-H.mmtt");
+                var result = _razorLightEngine.CompileRenderStringAsync(templateKey,
+                    htmlContent, model).GetAwaiter().GetResult();
+
+                //testing with html
+
                 return result;
 
             }
