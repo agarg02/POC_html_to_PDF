@@ -4,6 +4,7 @@ using JSON_To_PDF.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
+using System;
 using System.Net;
 using static JSON_To_PDF.Response.Result;
 
@@ -32,6 +33,7 @@ namespace JSON_To_PDF.Controllers
             ResultResponse result = new ResultResponse();
             try
             {
+
                 var generatedData = _htmltopdfRepository.GeneratePdfFromModel(rikiResult);
 
                 if (generatedData != null && generatedData.Result != null)  

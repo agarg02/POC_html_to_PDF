@@ -1,3 +1,4 @@
+
 using JSON_To_PDF.Repository.Interfaces;
 using JSON_To_PDF.Repository.Services;
 using RazorLight;
@@ -18,7 +19,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IRazorLightEngine>(provider =>
 {
     return new RazorLightEngineBuilder()
-        .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Views")) // Adjust the path to your Views folder
+        .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory())) // Adjust the path to your Views folder
         .UseMemoryCachingProvider()
         .Build();
 });
