@@ -1,160 +1,164 @@
-﻿using System.Net;
+﻿using Newtonsoft.Json;
+using System.Net;
 
 namespace JSON_To_PDF.Model
 {
     public class RikiResultSet
     {
-        public string? rikiId { get; set; }
-        public Consumer? consumer { get; set; }
-        public List<GroupedTransaction>? groupedTransactions { get; set; }
-        public RikiData? rikiData { get; set; }
-        public List<Remark>? remarks { get; set; }
-        public List<RecurrentItem>? recurrentItems { get; set; }
-        public List<CalendarMonthStatistic>? calendarMonthStatistics { get; set; }
+        public string? RikiId { get; set; }
+        public Consumer? Consumer { get; set; }
+        public List<GroupedTransaction>? GroupedTransactions { get; set; }
+        public RikiData? RikiData { get; set; }
+        public List<Remark>? Remarks { get; set; }
+        public List<RecurrentItem>? RecurrentItems { get; set; }
+        public List<CalendarMonthStatistic>? CalendarMonthStatistics { get; set; }
     }
 
     public class Consumer
     {
-        public string? firstName { get; set; }
-        public string? lastName { get; set; }
-        public List<Identifier>? identifiers { get; set; }
-        public string? dateOfBirth { get; set; }
-        public string? email { get; set; }
-        public string? phoneNumber { get; set; }
-        public Address? address { get; set; }
-        public string? associatedCustomerId { get; set; }
-        public string? consumerId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public List<Identifier>? Identifiers { get; set; }
+        public string? DateOfBirth { get; set; }
+        //public string? Email { get; set; }
+
+        public List<string> Email { get; set; }
+
+        public string? PhoneNumber { get; set; }
+        public Address? Address { get; set; }
+        public string? AssociatedCustomerId { get; set; }
+        public string? ConsumerId { get; set; }
     }
 
     public class Identifier
     {
-        public string? source { get; set; }
-        public string? id { get; set; }
+        public string? Source { get; set; }
+        public string? Id { get; set; }
     }
 
     public class Address
     {
-        public string? street { get; set; }
-        public string? street2 { get; set; }
-        public string? city { get; set; }
-        public string? region { get; set; }
-        public string? postalCode { get; set; }
-        public string? country { get; set; }
+        public string? Street { get; set; }
+        public string? Street2 { get; set; }
+        public string? City { get; set; }
+        public string? Region { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Country { get; set; }
     }
 
     public class GroupedTransaction
     {
-        public string? groupType { get; set; }
-        public List<GroupedAccountDatum>? groupedAccountData { get; set; }
+        public string? GroupType { get; set; }
+        public List<GroupedAccountDatum>? GroupedAccountData { get; set; }
     }
 
     public class GroupedAccountDatum
     {
-        public string? accountNumber { get; set; }
-        public string? accountType { get; set; }
-        public string? externalAccountId { get; set; }
-        public int currentBalance { get; set; }
-        public DateTime currentBalanceDate { get; set; }
-        public List<Transaction>? transactions { get; set; }
+        public string? AccountNumber { get; set; }
+        public string? AccountType { get; set; }
+        public string? ExternalAccountId { get; set; }
+        public float CurrentBalance { get; set; }
+        public DateTime CurrentBalanceDate { get; set; }
+        public List<Transaction>? Transactions { get; set; }
     }
 
     public class Transaction
     {
-        public string? externalTransactionId { get; set; }
-        public DateTime date { get; set; }
-        public string? description { get; set; }
-        public string? action { get; set; }
-        public int amount { get; set; }
+        public string? ExternalTransactionId { get; set; }
+        public DateTime Date { get; set; }
+        public string? Description { get; set; }
+        public string? Action { get; set; }
+        public float Amount { get; set; }
     }
 
     public class RikiData
     {
-        public string? rikIasWords { get; set; }
-        public int riki { get; set; }
-        public int monthToMonthStabilityScore { get; set; }
-        public int typicalMonthsTotalIncome { get; set; }
-        public int typicalMonthsUnadjustedAvailableIncome { get; set; }
-        public int typicalMonthsAdjustedAvailableIncome { get; set; }
-        public int cashFlowIndex { get; set; }
-        public int unadjustedCashFlowIndex { get; set; }
-        public int unadjustedRIKI { get; set; }
-        public int prospectiveRIKI_500 { get; set; }
-        public int totalMonthlyIncomeTrend { get; set; }
-        public int cashFlowIndexTrend { get; set; }
-        public int ccTrend { get; set; }
-        public int ccChangeTrend { get; set; }
-        public int bankAccountTrend { get; set; }
-        public int bankAccountChangeTrend { get; set; }
+        public string? RIKIasWords { get; set; }
+        public string RIKI { get; set; }
+        public string MonthToMonthStabilityScore { get; set; }
+        public float TypicalMonthsTotalIncome { get; set; }
+        public float TypicalMonthsUnadjustedAvailableIncome { get; set; }
+        public float TypicalMonthsAdjustedAvailableIncome { get; set; }
+        public float CashFlowIndex { get; set; }
+        public float UnadjustedCashFlowIndex { get; set; }
+        public string UnadjustedRIKI { get; set; }
+        public string ProspectiveRIKI_500 { get; set; }
+        public string TotalMonthlyIncomeTrend { get; set; }
+        public string CashFlowIndexTrend { get; set; }
+        public string CCTrend { get; set; }
+        public string CCChangeTrend { get; set; }
+        public string BankAccountTrend { get; set; }
+        public float BankAccountChangeTrend { get; set; }
     }
 
     public class Remark
     {
-        public string? label { get; set; }
-        public string? message { get; set; }
+        public string? Label { get; set; }
+        public string? Message { get; set; }
     }
 
     public class RecurrentItem
     {
-        public string? groupType { get; set; }
-        public string? description { get; set; }
-        public int occurrences { get; set; }
-        public int maxConsecutive { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
+        public string? GroupType { get; set; }
+        public string? Description { get; set; }
+        public int Occurrences { get; set; }
+        public int MaxConsecutive { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class CalendarMonthStatistic
     {
-        public string? label { get; set; }
-        public int monthsRequested { get; set; }
-        public int monthsDelivered { get; set; }
-        public DateTime lastDayOfLastFullMonthCovered { get; set; }
-        public DateTime beginningOfFirstMonth { get; set; }
-        public List<MonthlyStatistic>? monthlyStatistics { get; set; }
-        public List<MonthlyAnalysis>? monthlyAnalyses { get; set; }
+        public string? Label { get; set; }
+        public int MonthsRequested { get; set; }
+        public int MonthsDelivered { get; set; }
+        public DateTime LastDayOfLastFullMonthCovered { get; set; }
+        public DateTime BeginningOfFirstMonth { get; set; }
+        public List<MonthlyStatistic>? MonthlyStatistics { get; set; }
+        public List<MonthlyAnalysis>? MonthlyAnalyses { get; set; }
     }
 
     public class MonthlyStatistic
     {
-        public int daysInMonth { get; set; }
-        public int daysInFullMonth { get; set; }
-        public int accountsTracked { get; set; }
-        public int incomeTransactions { get; set; }
-        public int totalAmountIncomeTransactions { get; set; }
-        public int expenseTransactions { get; set; }
-        public int totalAmountExpenseTransactions { get; set; }
-        public int transactionsNotAcctToAcctTransfers { get; set; }
-        public int totalAmountTransactionsNotAcctToAcctTransfers { get; set; }
-        public int largestSingleTransactionNotAcctToAcctTransfers { get; set; }
-        public int bankAccountsVisible { get; set; }
-        public int ddaAccountsVisible { get; set; }
-        public int combinedBankAccountBalanceAvg { get; set; }
-        public int combinedBankAccountBalanceMin { get; set; }
-        public int combinedBankAccountBalanceMax { get; set; }
-        public int creditCardAccountsVisible { get; set; }
-        public int combinedCreditCardBalanceAvg { get; set; }
-        public int combinedCreditCardBalanceMin { get; set; }
-        public int combinedCreditCardBalanceMax { get; set; }
-        public int creditCardCharges { get; set; }
-        public int creditCardPayments { get; set; }
-        public int totalAmountCreditCardCharges { get; set; }
-        public int totalAmountCreditCardPayments { get; set; }
+        public int DaysInMonth { get; set; }
+        public int DaysInFullMonth { get; set; }
+        public int AccountsTracked { get; set; }
+        public int IncomeTransactions { get; set; }
+        public float TotalAmountIncomeTransactions { get; set; }
+        public int ExpenseTransactions { get; set; }
+        public float TotalAmountExpenseTransactions { get; set; }
+        public int TransactionsNotAcctToAcctTransfers { get; set; }
+        public float TotalAmountTransactionsNotAcctToAcctTransfers { get; set; }
+        public float LargestSingleTransactionNotAcctToAcctTransfers { get; set; }
+        public int BankAccountsVisible { get; set; }
+        public int DDAAccountsVisible { get; set; }
+        public float CombinedBankAccountBalanceAvg { get; set; }
+        public float CombinedBankAccountBalanceMin { get; set; }
+        public float CombinedBankAccountBalanceMax { get; set; }
+        public int CreditCardAccountsVisible { get; set; }
+        public float CombinedCreditCardBalanceAvg { get; set; }
+        public float CombinedCreditCardBalanceMin { get; set; }
+        public float CombinedCreditCardBalanceMax { get; set; }
+        public int CreditCardCharges { get; set; }
+        public int CreditCardPayments { get; set; }
+        public float TotalAmountCreditCardCharges { get; set; }
+        public float TotalAmountCreditCardPayments { get; set; }
     }
 
     public class MonthlyAnalysis
     {
-        public int monthlyDataCompleteness { get; set; }
-        public int avgDailySpending { get; set; }
-        public int incomeExpenseRatio { get; set; }
-        public int depletionDays { get; set; }
-        public int monthlyAmountChangeScore { get; set; }
-        public int monthlyAllocationChangeScore { get; set; }
-        public int estimatedDiscretionarySpending { get; set; }
-        public int unadjustedAvailableIncome { get; set; }
-        public int adjustedAvailableIncome { get; set; }
-        public int cashFlowIndexMonthly { get; set; }
-        public int unadjustedCashFlowIndexMonthly { get; set; }
-        public int prospectiveCashFlowIndexMonthly500 { get; set; }
+        public float MonthlyDataCompleteness { get; set; }
+        public float AvgDailySpending { get; set; }
+        public float IncomeExpenseRatio { get; set; }
+        public float DepletionDays { get; set; }
+        public float MonthlyAmountChangeScore { get; set; }
+        public float MonthlyAllocationChangeScore { get; set; }
+        public float EstimatedDiscretionarySpending { get; set; }
+        public float UnadjustedAvailableIncome { get; set; }
+        public float AdjustedAvailableIncome { get; set; }
+        public float CashFlowIndexMonthly { get; set; }
+        public float UnadjustedCashFlowIndexMonthly { get; set; }
+        public float ProspectiveCashFlowIndexMonthly500 { get; set; }
     }
 
 
