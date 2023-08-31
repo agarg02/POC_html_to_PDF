@@ -1,6 +1,8 @@
 ﻿@using System
 @using System.Globalization;
 @using System.Collections.Generic
+@using static JSON_To_PDF.Response.Result;
+@using System.Linq;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,15 +49,6 @@
         </table>
 
     <table border-spacing="0" cellpadding="0" cellspacing="0" class="main-table" style="width: 70%">
-       @* <tr style="width: 100%">
-            <td align="justify">
-                <span style="background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, rgba(62, 200, 159, 1) 72%, rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);
-                height:2px;display:block;"></span>
-            </td>
-            <td align="left" 
-                style="font-family: 'Roboto', sans-serif; letter-spacing: 3px; font-size: 25px; color: #000; font-weight: 600;width:300px;">47Billion
-            </td>
-        </tr>*@
         <tr>
             <td colspan="2">
                 <table style="width: 80%">
@@ -255,71 +248,142 @@
         <tr>
         
             <td colspan="2" style="padding-top: 30px 0;">
+                @*daysinmonth table start*@
                 <table class="calender-table" style="width: 80%; border-spacing: 5px;">
-                    <tr style="font-family: 'Roboto', sans-serif;width:max-content">
-                        <th></th>
+                     @if (true)
+                    {
+                        List<HeaderResponse> UniqueFormattedDates = new List<HeaderResponse>();
+                        List<HeaderResponse> FilteredValue;
+                        <tr style="font-family: 'Roboto', sans-serif;width:max-content">
+                            <th></th>
 
-                        @foreach (var calendar in @Model.CalendarMonthStatistics)
-                        {
-                            DateTime parsedDate;
-                            if (DateTime.TryParseExact(calendar.Label, "M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                            @foreach (var calendar in @Model.CalendarMonthStatistics)
                             {
-                                string formattedDate = parsedDate.ToString("MMM-yy");
-                                <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                    @formattedDate
-                                </th>
+                                DateTime parsedDate;
+                                if (DateTime.TryParseExact(calendar.Label, "M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                                {
+                                    string formattedDate = parsedDate.ToString("MMM-yy");
+
+                                    HeaderResponse uniqueformatteddate = new HeaderResponse();
+                                    uniqueformatteddate.ActualValue = DateTime.ParseExact(calendar.Label, "MM/yyyy", null);
+                                    uniqueformatteddate.FormattedValue = formattedDate;
+                                    UniqueFormattedDates.Add(uniqueformatteddate);
+                                }
                             }
-                            else
+
+                            @if(true){
+                                FilteredValue = UniqueFormattedDates.OrderByDescending(date => date.ActualValue).Take(6).ToList();
+                                @foreach (var filter in FilteredValue)
+                                {
+                                        <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
+                                            @filter.FormattedValue
+                                        </th>
+                                }
+                            }
+                        </tr>
+
+                        <tr>
+                            <td style="
+                                  font-family: 'Roboto', sans-serif;
+                                  font-size: 13px;
+                                  border-radius: 4px;
+                                  border: 1px solid #ddd;
+                                  padding: 5px 10px;
+                                  white-space: nowrap;
+                                ">
+                                Days in Month
+                            </td>
+
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
-                                <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                    -
-                                </th>
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                                  <td style="
+                                                  font-family: 'Roboto', sans-serif;
+                                                  font-size: 13px;
+                                                  border-radius: 4px;
+                                                  border: 1px solid #ddd;
+                                                  padding: 5px 10px;
+                                                  white-space: nowrap;
+                                                  text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyStatistics[0].DaysInMonth
+                                        </td>
+                                    }
+
+                                }
                             }
-                        }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Data Completeness
+                            </td>
 
-                        @*<th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jan-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Feb-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Mar-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Apr-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            May-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jun-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jul-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Aug-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Sep-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Oct-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Nov-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            dec-22
-                        </th>*@
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Avg
-                        </th>
-                    </tr>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                 font-family: 'Roboto', sans-serif;
+                                                  font-size: 13px;
+                                                  border-radius: 4px;
+                                                  border: 1px solid #ddd;
+                                                  padding: 5px 10px;
+                                                  white-space: nowrap;
+                                                  text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyAnalyses[0].MonthlyDataCompleteness.ToString("F2")
+                                        </td>
+                                    }
+                                }
+                            }                         
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                # Accounts Tracked
+                            </td>
 
-                    <tr>
-                        <td style="
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                 font-family: 'Roboto', sans-serif;
+                                                  font-size: 13px;
+                                                  border-radius: 4px;
+                                                  border: 1px solid #ddd;
+                                                  padding: 5px 10px;
+                                                  white-space: nowrap;
+                                                  text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyStatistics[0].AccountsTracked
+                                        </td>
+                                    }
+                                }
+                            }             
+                        </tr>
+                        <tr>
+                            <td style="
                   font-family: 'Roboto', sans-serif;
                   font-size: 13px;
                   border-radius: 4px;
@@ -327,2315 +391,396 @@
                   padding: 5px 10px;
                   white-space: nowrap;
                 ">
-                            Days in Month
-                        </td>
+                                # Income Transactions
+                            </td>
 
-                        @*@foreach (var t in @Model.calendarMonthStatistics)
-                        {
-                            
-                        }*@
 
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Data Completeness
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            # Accounts Tracked
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            # Income Transactions
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            # Expense Transactions
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Total Income
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Total Expenses
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Total Money Handled
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Largest Transaction
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Discretionary Spending
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            % Disc. Spending
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Available Income
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Adjusted Av. Income
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Average Daily Spend
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Income/Expense Ratio
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 13px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  min-width: 50px;
-                  text-align: right;
-                "></td>
-                    </tr>
-                    <tr>
+                                @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                                {
+                                @foreach (var headerdate in FilteredValue)
+                                    {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                        {
+                                        <td style="
+                                                  font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                            @daysinmonth.MonthlyStatistics[0].IncomeTransactions
+                                        </td>
+                                        }
+                                    }
+                                }
+
+
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                # Expense Transactions
+                            </td>
+
+                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                    ">
+                                            @daysinmonth.MonthlyStatistics[0].ExpenseTransactions
+                                        </td>
+                                    }
+                                }
+                            } 
+
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Total Income
+                            </td>
+
+
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyStatistics[0].TotalAmountIncomeTransactions
+                                        </td>
+                                    }
+                                }
+                            }
+
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Total Expenses
+                            </td>
+
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyStatistics[0].TotalAmountExpenseTransactions
+                                        </td>
+                                    }
+                                }
+                            }
+
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Total Money Handled
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            -
+                                        </td>
+                                    }
+                                }
+                            }
+                    
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Largest Transaction
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyStatistics[0].LargestSingleTransactionNotAcctToAcctTransfers
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Discretionary Spending
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyAnalyses[0].EstimatedDiscretionarySpending.ToString("F2")
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                % Disc. Spending
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            -
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Available Income
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyAnalyses[0].UnadjustedAvailableIncome.ToString("F2")
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Adjusted Av. Income
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyAnalyses[0].AdjustedAvailableIncome.ToString("F2")
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Average Daily Spend
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyAnalyses[0].AvgDailySpending.ToString("F2")
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td style="
+                  font-family: 'Roboto', sans-serif;
+                  font-size: 13px;
+                  border-radius: 4px;
+                  border: 1px solid #ddd;
+                  padding: 5px 10px;
+                  white-space: nowrap;
+                ">
+                                Income/Expense Ratio
+                            </td>
+                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
+                            {
+                                @foreach (var headerdate in FilteredValue)
+                                {
+                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    {
+                                        <td style="
+                                                    font-family: 'Roboto', sans-serif;
+                                                      font-size: 13px;
+                                                      border-radius: 4px;
+                                                      border: 1px solid #ddd;
+                                                      padding: 5px 10px;
+                                                      white-space: nowrap;
+                                                      text-align: right;
+                                                ">
+                                            @daysinmonth.MonthlyAnalyses[0].IncomeExpenseRatio.ToString("F2")
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                    }
                 </table>
+                @*daysinmonth table end*@
             </td>
         </tr>
         <tr>
@@ -2943,54 +1088,147 @@
         </tr>
         <tr>
             <td colspan="2" style="padding: 30px 0;">
+                @*Other table start*@
                 <table class="calender-table" style="width: 80%; border-spacing: 5px;">
-                    <tr>
-                        <th></th>
-                            
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jan-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Feb-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Mar-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Apr-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            May-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jun-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jul-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Aug-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Sep-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Oct-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Nov-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Dec-22
-                        </th>
-                    </tr>
-                    <tr>
-                        <td style="font-family: 'Roboto', sans-serif; font-size: 13px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap;">
-                            Mortgage Payments
-                        </td>
-                        {tableData}
-                    </tr>
+                       @if (true)
+                    {
+                        List<HeaderResponse> UniqueFormattedDates = new List<HeaderResponse>();
+                        <tr>
+                            <th></th>
+
+
+                            @foreach (var groupedtransaction in @Model.GroupedTransactions)
+                            {
+                                @if (groupedtransaction.GroupType.Split("__")[0] != "INCOME" && groupedtransaction.GroupType.Split("__")[0] != "EXPENSES" && 
+                                groupedtransaction.GroupedAccountData.Count > 0)
+                                {
+                                    @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
+                                    {
+
+                                        @if (@groupedaccountdata.Transactions.Count > 0)
+                                        {
+
+                                            @foreach (var transactions in @groupedaccountdata.Transactions)
+                                            {
+
+                                                if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                                                && UniqueFormattedDates.Count < 12)
+                                                {
+                                                    string formattedDate = parsedDate.ToString("MMM-yy");
+
+
+                                                    bool exists = UniqueFormattedDates.Any(value => value.FormattedValue == formattedDate);
+
+
+                                                    @if (!exists)
+                                                    {
+                                                        HeaderResponse uniqueformatteddate = new HeaderResponse();
+
+
+                                                        uniqueformatteddate.ActualValue = transactions.Date;
+                                                        uniqueformatteddate.FormattedValue = formattedDate;
+                                                        UniqueFormattedDates.Add(uniqueformatteddate);
+
+                                                        <th style="
+                                                                  font-family: 'Roboto', sans-serif;
+                                                                  text-align: center;
+                                                                  font-weight: 500;
+                                                                    font-size: 10px;
+                                                                  border-radius: 4px;
+                                                                  background-color: #919191;
+                                                                  color: #fff;
+                                                                  white-space: nowrap;
+                                                                ">
+                                                            @formattedDate
+                                                        </th>
+                                                    }
+
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+                                }
+                            }
+
+
+
+
+
+                        </tr>
+
+                        @*other data binding start*@
+                        @foreach (var groupedtransaction in @Model.GroupedTransactions)
+                        {
+                            @if (groupedtransaction.GroupType.Split("__")[0] != "INCOME" && groupedtransaction.GroupType.Split("__")[0] != "EXPENSES"
+                            && groupedtransaction.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0)
+                            {
+                                <tr>
+                                    <td style="
+                                          font-family: 'Roboto', sans-serif;
+                                          font-size: 9px;
+                                          border-radius: 4px;
+                                          border: 1px solid #ddd;
+                                          padding: 5px 10px;
+                                          white-space: nowrap;
+                                        ">
+                                        @groupedtransaction.GroupType.Split("__")[1]
+                                    </td>
+                                    @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
+                                    {
+
+                                        @if (@groupedaccountdata.Transactions.Count > 0)
+                                        {
+
+                                            @foreach (var headervalue in UniqueFormattedDates)
+                                            {
+
+                                                var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions).FirstOrDefault(x => x.Date.Year ==
+                                                headervalue.ActualValue.Year && x.Date.Month ==
+                                                headervalue.ActualValue.Month);
+
+                                                if (filteredData != null)
+                                                {
+                                                    <td style="
+                                                              font-family: 'Roboto', sans-serif;
+                                                              font-size: 9px;
+                                                              border-radius: 4px;
+                                                              border: 1px solid #ddd;
+                                                              padding: 5px 10px;
+                                                              white-space: nowrap;
+                                                              text-align: right;
+                                                            ">
+                                                        @filteredData.Amount
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="
+                                                              font-family: 'Roboto', sans-serif;
+                                                              font-size: 9px;
+                                                              border-radius: 4px;
+                                                              border: 1px solid #ddd;
+                                                              padding: 5px 10px;
+                                                              white-space: nowrap;
+                                                              text-align: right;
+                                                            ">
+                                                        -
+                                                    </td>
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+
+                                </tr>
+                            }
+                        }
+                        @*other data binding end*@
+                    }
                 </table>
+                @*other table start*@
             </td>
         </tr>
         <tr>
@@ -3009,109 +1247,145 @@
         </tr>
         <tr>
             <td colspan="2">
+                @*Income table start*@
                 <table class="calender-table" style="width: 80%; border-spacing: 5px;">
-                    <tr>
-                        <th></th>
+                        @if (true)
+                    {
+                        List<HeaderResponse> UniqueFormattedDates = new List<HeaderResponse>();
+                        <tr>
+                            <th></th>
 
-                          @* @foreach (var calendar in @Model.calendarMonthStatistics)
+
+                            @foreach (var groupedtransaction in @Model.GroupedTransactions)
                             {
-                                DateTime parsedDate;
-                                if (DateTime.TryParseExact(calendar.label, "M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                                @if (groupedtransaction.GroupType.Split("__")[0] == "INCOME" && groupedtransaction.GroupedAccountData.Count > 0)
                                 {
-                                    string formattedDate = parsedDate.ToString("MMM-yy");
-                                    <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                        @formattedDate
-                                    </th>
-                                }
-                                else
-                                {
-                                    <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                        Invalid date format
-                                    </th>                        
-                                }
-                            }*@
-
-
-                        @foreach (var grouptransaction in @Model.GroupedTransactions)
-                        {
-                            @if (@grouptransaction.GroupType == "INCOME__Payroll_Deposits")
-                            {
-                                @*@foreach (var groupaccdata in @grouptransaction.groupedAccountData)
-                                {
-                                    @if (@groupaccdata.transactions != null)
+                                    @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
                                     {
-                                        @foreach (var transaction in @grouptransaction.transactions)
+
+                                        @if (@groupedaccountdata.Transactions.Count > 0)
                                         {
-                                            @if (@groupaccdata.Date)
-                                            {*@
-                                                DateTime parsedDate;
-                                                if (DateTime.TryParseExact("2022-02-22T06:17:03.080Z", "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+
+                                            @foreach (var transactions in @groupedaccountdata.Transactions)
+                                            {
+
+                                                if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                                                && UniqueFormattedDates.Count < 12)
                                                 {
                                                     string formattedDate = parsedDate.ToString("MMM-yy");
-                                                    <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                                        @formattedDate
-                                                    </th>
+
+
+                                                    bool exists = UniqueFormattedDates.Any(value => value.FormattedValue == formattedDate);
+
+
+                                                    @if (!exists)
+                                                    {
+                                                        HeaderResponse uniqueformatteddate = new HeaderResponse();
+
+
+                                                        uniqueformatteddate.ActualValue = transactions.Date;
+                                                        uniqueformatteddate.FormattedValue = formattedDate;
+                                                        UniqueFormattedDates.Add(uniqueformatteddate);
+
+                                                        <th style="
+                                                                  font-family: 'Roboto', sans-serif;
+                                                                  text-align: center;
+                                                                  font-weight: 500;
+                                                                    font-size: 10px;
+                                                                  border-radius: 4px;
+                                                                  background-color: #919191;
+                                                                  color: #fff;
+                                                                  white-space: nowrap;
+                                                                ">
+                                                            @formattedDate
+                                                        </th>
+                                                    }
+
                                                 }
-                                                else
-                                                {
-                                                    <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                                        Invalid date format
-                                                    </th>
-                                                }
-                                           @* }
+                                            }
+
                                         }
 
                                     }
-                                }*@
+                                }
+                            }
+
+
+
+
+
+                        </tr>
+
+                        @*Income data binding start*@
+                        @foreach (var groupedtransaction in @Model.GroupedTransactions)
+                        {
+                            @if (groupedtransaction.GroupType.Split("__")[0] == "INCOME" && groupedtransaction.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0)
+                            {
+                                <tr>
+                                    <td style="
+                                          font-family: 'Roboto', sans-serif;
+                                          font-size: 9px;
+                                          border-radius: 4px;
+                                          border: 1px solid #ddd;
+                                          padding: 5px 10px;
+                                          white-space: nowrap;
+                                        ">
+                                        @groupedtransaction.GroupType.Split("__")[1]
+                                    </td>
+                                    @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
+                                    {
+
+                                        @if (@groupedaccountdata.Transactions.Count > 0)
+                                        {
+
+                                            @foreach (var headervalue in UniqueFormattedDates)
+                                            {
+
+                                                var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions).FirstOrDefault(x => x.Date.Year ==
+                                                headervalue.ActualValue.Year && x.Date.Month ==
+                                                headervalue.ActualValue.Month);
+
+                                                if (filteredData != null)
+                                                {
+                                                    <td style="
+                                                              font-family: 'Roboto', sans-serif;
+                                                              font-size: 9px;
+                                                              border-radius: 4px;
+                                                              border: 1px solid #ddd;
+                                                              padding: 5px 10px;
+                                                              white-space: nowrap;
+                                                              text-align: right;
+                                                            ">
+                                                        @filteredData.Amount
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="
+                                                              font-family: 'Roboto', sans-serif;
+                                                              font-size: 9px;
+                                                              border-radius: 4px;
+                                                              border: 1px solid #ddd;
+                                                              padding: 5px 10px;
+                                                              white-space: nowrap;
+                                                              text-align: right;
+                                                            ">
+                                                        -
+                                                    </td>
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+
+                                </tr>
                             }
                         }
-
-
-
-                       @* <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jan-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Feb-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Mar-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Apr-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            May-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jun-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Jul-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Aug-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Sep-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Oct-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Nov-22
-                        </th>
-                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                            Dec-22
-                        </th>*@
-                    </tr>
-                    <tr>
-                        <td style="font-family: 'Roboto', sans-serif; font-size: 13px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap;">
-                            Payroll Deposits
-                        </td>
-                        {tableData}
-                    </tr>
+                        @*Income data binding end*@
+                    }
                 </table>
+                @*Income table start*@
             </td>
         </tr>
         <tr>
@@ -3120,7 +1394,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="padding: 0 0 20px;">
+            <td colspan="2">
                 <p style="margin: 0; font-size: 24px; font-weight: 400; font-family: 'Roboto', sans-serif;">
                     Monthly Expenses
                 </p>
@@ -3128,206 +1402,140 @@
         </tr>
         <tr>
             <td colspan="2">
+                @*Expense table start*@
                 <table class="calender-table" style="width: 80%; border-spacing: 5px;">
-                    <tr>
-                        <th></th>                   
+                    @if (true)
+                    {
+                        List<HeaderResponse> UniqueFormattedDates = new List<HeaderResponse>();
+                        <tr>
+                            <th></th>
 
-                        @foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        {
 
-                            @if (groupedtransaction.GroupType.Split("__")[0] == "EXPENSES" && groupedtransaction.GroupedAccountData.Count > 0)
+                            @foreach (var groupedtransaction in @Model.GroupedTransactions)
                             {
-                                @*<th>@Model.groupedTransactions.Count</th>*@
-                                @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
+                                @if (groupedtransaction.GroupType.Split("__")[0] == "EXPENSES" && groupedtransaction.GroupedAccountData.Count > 0)
                                 {
-
-                                    @if (@groupedaccountdata.Transactions.Count > 0)
+                                    @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
                                     {
-                                        List<string> uniqueFormattedDates = new List<string>();
-                                        @foreach(var transactions in @groupedaccountdata.Transactions)
+                                     
+                                        @if (@groupedaccountdata.Transactions.Count > 0)
                                         {
-                                            @*DateTime parsedDate;*@
-                                            @*<th>@transactions.date</th>*@
-                                            if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-                                            && uniqueFormattedDates.Count < 12)
-                                            {
-                                                        string formattedDate = parsedDate.ToString("MMM-yy");
 
-                                                        if (!uniqueFormattedDates.Contains(formattedDate))
-                                                        {
-                                                            
-                                                            uniqueFormattedDates.Add(formattedDate);
-                                                            <th style="
+                                            @foreach (var transactions in @groupedaccountdata.Transactions)
+                                            {
+                                        
+                                                if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                                                && UniqueFormattedDates.Count < 12)
+                                                {
+                                                    string formattedDate = parsedDate.ToString("MMM-yy");
+                                                   
+
+                                                    bool exists = UniqueFormattedDates.Any(value => value.FormattedValue == formattedDate);
+                                                   
+                                                    @if (!exists)
+                                                    {
+                                                        HeaderResponse uniqueformatteddate = new HeaderResponse();
+
+                                                        uniqueformatteddate.ActualValue = transactions.Date;
+                                                        uniqueformatteddate.FormattedValue = formattedDate;
+                                                        UniqueFormattedDates.Add(uniqueformatteddate);
+
+                                                           <th style="
                                                                   font-family: 'Roboto', sans-serif;
-                                                                  text-align: right;
+                                                                  text-align: center;
                                                                   font-weight: 500;
-                                                                    font-size: 11px;
+                                                                    font-size: 9px;
                                                                   border-radius: 4px;
                                                                   background-color: #919191;
                                                                   color: #fff;
+                                                                  white-space: nowrap;
                                                                 ">
-                                                                @formattedDate
-                                                              </th>
-                                                        }
+                                                            @formattedDate
+                                                            </th>
 
-                                        
+                        }
+
+                        }
                                             }
+
                                         }
+
                                     }
                                 }
                             }
 
-                        }
+                        </tr>
 
-                        
+                        @*Expense data bindng start*@
+                            @foreach (var groupedtransaction in @Model.GroupedTransactions)
+                            {
+                                @if (groupedtransaction.GroupType.Split("__")[0] == "EXPENSES" && groupedtransaction.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0)
+                                {
+                                    <tr>
+                                    <td style="
+                                          font-family: 'Roboto', sans-serif;
+                                          font-size: 9px;
+                                          border-radius: 4px;
+                                          border: 1px solid #ddd;
+                                          padding: 5px 10px;
+                                          white-space: nowrap;
+                                        ">
+                                        @groupedtransaction.GroupType.Split("__")[1]
+                                    </td>
+                                    @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
+                                    {
 
-                    </tr>
-                    <tr>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
-                            Student Loan Payments
-                        </td>
+                                        @if (@groupedaccountdata.Transactions.Count > 0)
+                                        {
 
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            30
-                        </td>
-                        <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 11px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                  text-align: right;
-                ">
-                            31
-                        </td>
-                    </tr>
+                                            @foreach (var headervalue in UniqueFormattedDates)
+                                            {
+                                                                                               
+                                                   var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions).FirstOrDefault(x => x.Date.Year ==
+                                                    headervalue.ActualValue.Year && x.Date.Month ==
+                                                    headervalue.ActualValue.Month);
+
+                                                    if(filteredData != null)
+                                                    {
+                                                        <td style="
+                                                              font-family: 'Roboto', sans-serif;
+                                                              font-size: 9px;
+                                                              border-radius: 4px;
+                                                              border: 1px solid #ddd;
+                                                              padding: 5px 10px;
+                                                              white-space: nowrap;
+                                                              text-align: right;
+                                                            ">
+                                                            @filteredData.Amount
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="
+                                                              font-family: 'Roboto', sans-serif;
+                                                              font-size: 9px;
+                                                              border-radius: 4px;
+                                                              border: 1px solid #ddd;
+                                                              padding: 5px 10px;
+                                                              white-space: nowrap;
+                                                              text-align: right;
+                                                            ">
+                                                            -
+                                                        </td>
+                                                    }
+                                            }
+
+                                        }
+
+                                    }
+
+                                    </tr>
+                                }
+                            }
+                            @*Expense data binding end*@
+           }
                 </table>
+                @*Expense table end*@
             </td>
         </tr>
     </table>

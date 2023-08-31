@@ -18,5 +18,11 @@ namespace JSON_To_PDF.Response
             public string? Htmlcode { get; set; }
             public byte[]? Bytearr { get; set; }
         }
+
+        public class HeaderResponse
+        {
+            public DateTime ActualValue { get; set; }
+            public string FormattedValue { get; set; }
+        }
     }
 }
