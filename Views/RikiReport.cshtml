@@ -279,6 +279,9 @@
                                             @filter.FormattedValue
                                         </th>
                                 }
+                                <th style="font-family: 'Roboto', sans-serif; text-align: center; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
+                                    Avg
+                                </th>
                             }
                         </tr>
 
@@ -294,27 +297,45 @@
                                 Days in Month
                             </td>
 
-                            @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
-                            {
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                            @if(true){
+                                int totalValue = 0;
+                                int totalCount = 0;
+                                @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                                     {
-                                                  <td style="
-                                                  font-family: 'Roboto', sans-serif;
-                                                  font-size: 13px;
-                                                  border-radius: 4px;
-                                                  border: 1px solid #ddd;
-                                                  padding: 5px 10px;
-                                                  white-space: nowrap;
-                                                  text-align: right;
-                                                ">
-                                            @daysinmonth.MonthlyStatistics[0].DaysInMonth
-                                        </td>
-                                    }
+                                        @foreach (var headerdate in FilteredValue)
+                                        {
+                                            if (daysinmonth.Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                            {
+                                                          <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                                            @daysinmonth.MonthlyStatistics[0].DaysInMonth
+                                            </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].DaysInMonth;
+                                            }
 
-                                }
+                                        }
+                                    }
+                                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                                        @(totalValue / totalCount)
+                                                </td>
                             }
+                            
                         </tr>
                         <tr>
                             <td style="
@@ -328,6 +349,9 @@
                                 Data Completeness
                             </td>
 
+                               @if(true){
+                                double totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -343,11 +367,25 @@
                                                   white-space: nowrap;
                                                   text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyAnalyses[0].MonthlyDataCompleteness.ToString("F2")
+                                                @Math.Round(@daysinmonth.MonthlyAnalyses[0].MonthlyDataCompleteness, 2)
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyAnalyses[0].MonthlyDataCompleteness;
                                     }
                                 }
-                            }                         
+                            }
+                                                         <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    @Math.Round((totalValue / totalCount),2)
+                                </td>
+                            }
                         </tr>
                         <tr>
                             <td style="
@@ -361,6 +399,9 @@
                                 # Accounts Tracked
                             </td>
 
+                               @if(true){
+                                int totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -378,9 +419,23 @@
                                                 ">
                                             @daysinmonth.MonthlyStatistics[0].AccountsTracked
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].AccountsTracked;
                                     }
                                 }
-                            }             
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    @(totalValue / totalCount)
+                                </td>
+                            }
                         </tr>
                         <tr>
                             <td style="
@@ -394,7 +449,10 @@
                                 # Income Transactions
                             </td>
 
-
+                            @if (true)
+                            {
+                                int totalValue = 0;
+                                int totalCount = 0;
                                 @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                                 {
                                 @foreach (var headerdate in FilteredValue)
@@ -412,10 +470,23 @@
                                                         ">
                                             @daysinmonth.MonthlyStatistics[0].IncomeTransactions
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].IncomeTransactions;
                                         }
                                     }
                                 }
-
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    @(totalValue / totalCount)
+                                </td>
+                            }
 
                         </tr>
                         <tr>
@@ -430,6 +501,9 @@
                                 # Expense Transactions
                             </td>
 
+                               @if(true){
+                                int totalValue = 0;
+                                int totalCount = 0;
                              @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -447,9 +521,23 @@
                                                     ">
                                             @daysinmonth.MonthlyStatistics[0].ExpenseTransactions
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].ExpenseTransactions;
                                     }
                                 }
-                            } 
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    @(totalValue / totalCount)
+                                </td>
+                            }
 
                         </tr>
                         <tr>
@@ -464,7 +552,9 @@
                                 Total Income
                             </td>
 
-
+                               @if(true){
+                                int totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -480,10 +570,24 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyStatistics[0].TotalAmountIncomeTransactions
+                                            $@daysinmonth.MonthlyStatistics[0].TotalAmountIncomeTransactions
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].TotalAmountIncomeTransactions;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    $@(totalValue / totalCount)
+                                </td>
                             }
 
                         </tr>
@@ -499,6 +603,9 @@
                                 Total Expenses
                             </td>
 
+                               @if(true){
+                                int totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -516,8 +623,22 @@
                                                 ">
                                             @daysinmonth.MonthlyStatistics[0].TotalAmountExpenseTransactions
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].TotalAmountExpenseTransactions;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    @(totalValue / totalCount)
+                                </td>
                             }
 
                         </tr>
@@ -565,6 +686,10 @@
                 ">
                                 Largest Transaction
                             </td>
+
+                               @if(true){
+                                int totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -580,10 +705,24 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyStatistics[0].LargestSingleTransactionNotAcctToAcctTransfers
+                                            $@daysinmonth.MonthlyStatistics[0].LargestSingleTransactionNotAcctToAcctTransfers
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyStatistics[0].LargestSingleTransactionNotAcctToAcctTransfers;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    $@(totalValue / totalCount)
+                                </td>
                             }
                         </tr>
                         <tr>
@@ -597,6 +736,10 @@
                 ">
                                 Discretionary Spending
                             </td>
+
+                            @if(true){
+                                double totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -612,10 +755,24 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyAnalyses[0].EstimatedDiscretionarySpending.ToString("F2")
+                                                $@Math.Round(@daysinmonth.MonthlyAnalyses[0].EstimatedDiscretionarySpending, 2)
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyAnalyses[0].EstimatedDiscretionarySpending;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    $@Math.Round((totalValue / totalCount),2)
+                                </td>
                             }
                         </tr>
                         <tr>
@@ -661,6 +818,10 @@
                 ">
                                 Available Income
                             </td>
+
+                            @if(true){
+                                double totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -676,10 +837,25 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyAnalyses[0].UnadjustedAvailableIncome.ToString("F2")
+                                                $@Math.Round(@daysinmonth.MonthlyAnalyses[0].UnadjustedAvailableIncome, 2)
+
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyAnalyses[0].UnadjustedAvailableIncome;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    $@Math.Round((totalValue / totalCount),2)
+                                </td>
                             }
                         </tr>
                         <tr>
@@ -693,6 +869,10 @@
                 ">
                                 Adjusted Av. Income
                             </td>
+
+                            @if(true){
+                                double totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -708,10 +888,25 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyAnalyses[0].AdjustedAvailableIncome.ToString("F2")
+                                                $@Math.Round(@daysinmonth.MonthlyAnalyses[0].AdjustedAvailableIncome, 2)
+
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyAnalyses[0].AdjustedAvailableIncome;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    $@Math.Round((totalValue / totalCount),2)
+                                </td>
                             }
                         </tr>
                         <tr>
@@ -725,6 +920,10 @@
                 ">
                                 Average Daily Spend
                             </td>
+
+                            @if(true){
+                                double totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -740,10 +939,25 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyAnalyses[0].AvgDailySpending.ToString("F2")
+                                                $@Math.Round(@daysinmonth.MonthlyAnalyses[0].AvgDailySpending, 2)
+
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyAnalyses[0].AvgDailySpending;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    $@Math.Round((totalValue / totalCount),2)
+                                </td>
                             }
                         </tr>
                         <tr>
@@ -757,6 +971,10 @@
                 ">
                                 Income/Expense Ratio
                             </td>
+
+                            @if(true){
+                                double totalValue = 0;
+                                int totalCount = 0;
                             @foreach (var daysinmonth in @Model.CalendarMonthStatistics)
                             {
                                 @foreach (var headerdate in FilteredValue)
@@ -772,10 +990,25 @@
                                                       white-space: nowrap;
                                                       text-align: right;
                                                 ">
-                                            @daysinmonth.MonthlyAnalyses[0].IncomeExpenseRatio.ToString("F2")
+                                                @Math.Round(@daysinmonth.MonthlyAnalyses[0].IncomeExpenseRatio, 2)
+
                                         </td>
+                                            ++totalCount;
+                                            totalValue += @daysinmonth.MonthlyAnalyses[0].IncomeExpenseRatio;
                                     }
                                 }
+                            }
+                                <td style="
+                                                          font-family: 'Roboto', sans-serif;
+                                                          font-size: 13px;
+                                                          border-radius: 4px;
+                                                          border: 1px solid #ddd;
+                                                          padding: 5px 10px;
+                                                          white-space: nowrap;
+                                                          text-align: right;
+                                                        ">
+                                    @Math.Round((totalValue / totalCount),2)
+                                </td>
                             }
                         </tr>
                     }
@@ -1199,7 +1432,7 @@
                                                               white-space: nowrap;
                                                               text-align: right;
                                                             ">
-                                                        @filteredData.Amount
+                                                        $@filteredData.Amount
                                                     </td>
                                                 }
                                                 else
@@ -1356,7 +1589,7 @@
                                                               white-space: nowrap;
                                                               text-align: right;
                                                             ">
-                                                        @filteredData.Amount
+                                                        $@filteredData.Amount
                                                     </td>
                                                 }
                                                 else
@@ -1506,7 +1739,7 @@
                                                               white-space: nowrap;
                                                               text-align: right;
                                                             ">
-                                                            @filteredData.Amount
+                                                            $@filteredData.Amount
                                                         </td>
                                                     }
                                                     else
