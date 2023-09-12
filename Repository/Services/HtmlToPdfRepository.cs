@@ -17,7 +17,13 @@ using iText.Html2pdf.Css.Apply.Impl;
 using iText.StyledXmlParser.Css.Media;
 using iText.Kernel.Geom;
 using iText.Layout.Font;
-
+using iText.Kernel.Events;
+using iText.Kernel.Pdf.Canvas;
+using iText.Layout.Borders;
+using System;
+using iText.Kernel.Font;
+using iText.Layout.Properties;
+using iText.IO.Font;
 
 namespace JSON_To_PDF.Repository.Services
 {
@@ -111,7 +117,6 @@ namespace JSON_To_PDF.Repository.Services
         }
         #endregion
 
-
         #region convert html code to pdf
             private async Task<ResultResponse> ConvertHtmlToPdf(string htmlCode)
             {
@@ -119,7 +124,37 @@ namespace JSON_To_PDF.Repository.Services
             try
             {
 
-                Byte[] pdfBytes;
+                //byte[] pdfbytes;
+
+                //using (memorystream memorystream = new memorystream())
+                //{
+                //    converterproperties converterproperties = new converterproperties();
+                //    pdfdocument pdfdocument = new pdfdocument(new pdfwriter(memorystream));
+                //    pdfdocument.setdefaultpagesize(pagesize.a4);
+
+
+
+                //    fontprovider fontprovider = new fontprovider();
+                //    fontprovider.addstandardpdffonts();
+                //    converterproperties.setfontprovider(fontprovider);
+                //    htmlconverter.converttopdf(htmlcode, pdfdocument, converterproperties);
+                //    pdfdocument.close(); // close the pdfdocument before converting to a byte array
+
+
+
+                //    pdfbytes = memorystream.toarray();
+                //}
+
+
+                //result.pdfinbyte = pdfbytes;
+                //result.status = true;
+                //return result;
+
+
+                //header
+                //header
+
+                byte[] pdfbytes;
 
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
@@ -127,25 +162,47 @@ namespace JSON_To_PDF.Repository.Services
                     PdfDocument pdfDocument = new PdfDocument(new PdfWriter(memoryStream));
                     pdfDocument.SetDefaultPageSize(PageSize.A4);
 
+                    string htmlHeaderContent = "   <table border-spacing=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" margin-top: 40px; \r\nfont-family: ' Roboto', sans-serif; " +
+                        "background-color: #fff;\">\r\n        " +
+                        "<tr>\r\n            " +
+                        "<td align=\"justify\">\r\n                " +
+                        "<span style=\"background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, rgba(62, 200, 159, 1) 72%, " +
+                        "rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);\r\n            height:1px;width:565px;display:block;\"></span>\r\n           " +
+                        " </td>\r\n            " +
+                        "<td align=\"right\"\r\n                style=\"font-family: 'Roboto', sans-serif;letter-spacing: 3px;font-size:25px;color:#000;font-weight:900;width:150px; " +
+                        "padding-left:15px;\">\r\n               <b style=\"font-weight:bold;\">47BILLION</b> \r\n            </td>\r\n   " +
+                        "\r\n        </tr>\r\n     </ table >\r\n" +
+                        "<!-- Include Google Fonts link for Roboto -->\r\n" +
+                        "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap\">";
 
+
+              
+
+
+                    // Create a custom page event handler for adding headers
+                    pdfDocument.AddEventHandler(PdfDocumentEvent.START_PAGE,new CustomHeaderEventHandler(htmlHeaderContent));
 
                     FontProvider fontProvider = new FontProvider();
                     fontProvider.AddStandardPdfFonts();
                     converterProperties.SetFontProvider(fontProvider);
                     HtmlConverter.ConvertToPdf(htmlCode, pdfDocument, converterProperties);
-                    pdfDocument.Close(); // Close the PdfDocument before converting to a byte array
+                    pdfDocument.Close(); // Close the pdfDocument before converting to a byte array
 
-
-
-                    pdfBytes = memoryStream.ToArray();
+                    pdfbytes = memoryStream.ToArray();
                 }
 
-
-                result.PdfInByte = pdfBytes;
+                 result.PdfInByte = pdfbytes;
                 result.Status = true;
                 return result;
 
-            }catch(Exception ex)
+                //header
+
+
+                //header
+
+
+            }
+            catch (Exception ex)
             {
                 result.Message = ex.Message;
                 result.Status = false;
@@ -154,6 +211,70 @@ namespace JSON_To_PDF.Repository.Services
             }
             #endregion
 
-
     }
+
+
+    public class CustomHeaderEventHandler : IEventHandler
+    {
+        private string htmlHeader;
+
+        public CustomHeaderEventHandler(string htmlHeader)
+        {
+            this.htmlHeader = htmlHeader;
+        }
+        public void HandleEvent(Event currentEvent)
+        {
+            PdfDocumentEvent docEvent = (PdfDocumentEvent)currentEvent;
+            PdfDocument pdfDoc = docEvent.GetDocument();
+
+            int pageNumber = docEvent.GetDocument().GetPageNumber(docEvent.GetPage());
+
+            if (pageNumber >= 2)
+            {
+
+                PdfPage page = docEvent.GetPage();
+
+            // Use predefined page size like A4
+            PageSize pageSize = PageSize.A4;
+
+            // Create a layout for the header
+            float pageWidth = pdfDoc.GetDefaultPageSize().GetWidth();
+            float pageHeight = pdfDoc.GetDefaultPageSize().GetHeight();
+            float marginLeft = 36; // Adjust this as needed
+            float marginRight = 36; // Adjust this as needed
+            float marginTop = 36; // Adjust this as needed
+
+            PdfCanvas canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdfDoc);
+
+
+            // Create a div for the header content
+            Div headerDiv = new Div()
+                .SetWidth(pageWidth - marginLeft - marginRight)
+                .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            //// Add your header content here
+            //PdfFont font = PdfFontFactory.CreateFont("Helvetica", PdfEncodings.WINANSI, pdfDoc);
+            //Paragraph headerText = new Paragraph("Your Header Text")
+            //    .SetFont(font)
+            //    .SetFontSize(12);
+
+            //// Add the header text to the header div
+            //headerDiv.Add(headerText);
+
+            // Convert the HTML string to iText layout elements
+            IList<IElement> elements = HtmlConverter.ConvertToElements(htmlHeader);
+
+            // Add the elements to the header div
+            foreach (var element in elements)
+            {
+                headerDiv.Add((IBlockElement)element);
+            }
+
+            // Add the header div to the page
+            new Canvas(canvas, PageSize.A4, true)
+                .Add(headerDiv);
+        }
+        }
+    }
+
 }

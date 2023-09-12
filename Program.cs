@@ -1,6 +1,8 @@
 
 using JSON_To_PDF.Repository.Interfaces;
 using JSON_To_PDF.Repository.Services;
+using JSON_To_PDF.Validators.Interface;
+using JSON_To_PDF.Validators.Services;
 using RazorLight;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,8 @@ builder.Services.AddSwaggerGen();
 
 // Register custom services.
 builder.Services.AddScoped<IHtmlToPdfRepository, HtmlToPdfRepository>();
+builder.Services.AddScoped<IMortgageRepository, MortgageRepository>();
+builder.Services.AddScoped<IMortgageValidation, MortgageValidation>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IRazorLightEngine>(provider =>

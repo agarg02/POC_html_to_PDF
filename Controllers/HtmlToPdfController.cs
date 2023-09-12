@@ -57,7 +57,6 @@ namespace JSON_To_PDF.Controllers
                 {
                     ErrorCode = 500,
                     Message = ex.Message
-
                 };
 
                 return BadRequest(errorResponse);

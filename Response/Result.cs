@@ -23,6 +23,8 @@ namespace JSON_To_PDF.Response
         {
             public DateTime ActualValue { get; set; }
             public string FormattedValue { get; set; }
+
+            public int Index { get; set; }
         }
     }
 }
