@@ -1,9 +1,7 @@
 ﻿using JSON_To_PDF.Model;
 using JSON_To_PDF.Repository.Interfaces;
-using JSON_To_PDF.Response;
 using JSON_To_PDF.Validators.Interface;
 using Microsoft.AspNetCore.Mvc;
-using static JSON_To_PDF.Response.Result;
 
 namespace JSON_To_PDF.Controllers
 {
@@ -42,9 +40,56 @@ namespace JSON_To_PDF.Controllers
 
                 return BadRequest(validation);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex);
+                return BadRequest(exception);
+            }
+        }
+
+        /// <summary>
+        /// get mortgage data by id
+        /// </summary>
+        /// <param name="employerId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("getMortgageData")]
+        public async Task<IActionResult> GetMortgageData(string employeeId)
+        {
+            try
+            {
+                if (employeeId != null && employeeId != "")
+                {
+                    var mortgageData = _mortgageRepository.GetMortgageRecord(employeeId);
+                    return Ok(mortgageData);
+                }
+                return null;
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception);
+            }
+        }
+
+        /// <summary>
+        /// get banking detail
+        /// </summary>
+        /// <param></param>
+        [HttpGet]
+        [Route("getBankDetailByEmpid")]
+        public async Task<IActionResult> GetBankingDetail(string employerId)
+        {
+            try
+            {
+                if(employerId != null && employerId != "")
+                {
+                    var bankingDetail = _mortgageRepository.GetBankDetailByEmployeeId(employerId);
+                    return Ok(bankingDetail);
+                }
+                return null;
+            }
+            catch(Exception exception)
+            {
+                return BadRequest(exception);
             }
         }
 

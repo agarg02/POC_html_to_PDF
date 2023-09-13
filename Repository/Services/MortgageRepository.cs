@@ -7,7 +7,7 @@ namespace JSON_To_PDF.Repository.Services
     public class MortgageRepository : IMortgageRepository
     {
 
-        #region main calling unit
+        #region add mortgage record
         public async Task<Mortgage> AddMortgageRecord(Mortgage mortgage)
         {
             try
@@ -23,6 +23,38 @@ namespace JSON_To_PDF.Repository.Services
                 throw;
             }
 
+        }
+        #endregion
+
+
+        #region get mortgage record
+        public Mortgage GetMortgageRecord(string employeeid)
+        {
+            try
+            {
+                Mortgage mortgage = new Mortgage();
+                return mortgage;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+
+        #region
+        public EmployeeBankDetail GetBankDetailByEmployeeId(string employerId)
+        {
+            try
+            {
+                EmployeeBankDetail detail = new EmployeeBankDetail();
+                return detail;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
 
