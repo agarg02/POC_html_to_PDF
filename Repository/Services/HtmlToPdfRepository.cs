@@ -25,6 +25,7 @@ using iText.Kernel.Font;
 using iText.Layout.Properties;
 using iText.IO.Font;
 
+
 namespace JSON_To_PDF.Repository.Services
 {
     public class HtmlToPdfRepository : IHtmlToPdfRepository
@@ -63,7 +64,7 @@ namespace JSON_To_PDF.Repository.Services
                         //to read file and return html string
 
                         string htmlCode = PopulateHtmlWithDynamicValues(htmlContent, rikiResult);
-                        var convertedInByte = await ConvertHtmlToPdf(htmlCode);
+                        var convertedInByte = await ConvertHtmlToPdf(htmlCode, filepath);
 
                         if (convertedInByte != null && convertedInByte.Status && convertedInByte.PdfInByte != null)
                         {
@@ -118,41 +119,11 @@ namespace JSON_To_PDF.Repository.Services
         #endregion
 
         #region convert html code to pdf
-            private async Task<ResultResponse> ConvertHtmlToPdf(string htmlCode)
+            private async Task<ResultResponse> ConvertHtmlToPdf(string htmlCode, string File_Paths)
             {
             ResultResponse result = new ResultResponse();
             try
             {
-
-                //byte[] pdfbytes;
-
-                //using (memorystream memorystream = new memorystream())
-                //{
-                //    converterproperties converterproperties = new converterproperties();
-                //    pdfdocument pdfdocument = new pdfdocument(new pdfwriter(memorystream));
-                //    pdfdocument.setdefaultpagesize(pagesize.a4);
-
-
-
-                //    fontprovider fontprovider = new fontprovider();
-                //    fontprovider.addstandardpdffonts();
-                //    converterproperties.setfontprovider(fontprovider);
-                //    htmlconverter.converttopdf(htmlcode, pdfdocument, converterproperties);
-                //    pdfdocument.close(); // close the pdfdocument before converting to a byte array
-
-
-
-                //    pdfbytes = memorystream.toarray();
-                //}
-
-
-                //result.pdfinbyte = pdfbytes;
-                //result.status = true;
-                //return result;
-
-
-                //header
-                //header
 
                 byte[] pdfbytes;
 
@@ -161,20 +132,38 @@ namespace JSON_To_PDF.Repository.Services
                     ConverterProperties converterProperties = new ConverterProperties();
                     PdfDocument pdfDocument = new PdfDocument(new PdfWriter(memoryStream));
                     pdfDocument.SetDefaultPageSize(PageSize.A4);
-
-                    string htmlHeaderContent = "   <table border-spacing=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" margin-top: 40px; \r\nfont-family: ' Roboto', sans-serif; " +
-                        "background-color: #fff;\">\r\n        " +
-                        "<tr>\r\n            " +
-                        "<td align=\"justify\">\r\n                " +
-                        "<span style=\"background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, rgba(62, 200, 159, 1) 72%, " +
-                        "rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);\r\n            height:1px;width:565px;display:block;\"></span>\r\n           " +
-                        " </td>\r\n            " +
-                        "<td align=\"right\"\r\n                style=\"font-family: 'Roboto', sans-serif;letter-spacing: 3px;font-size:25px;color:#000;font-weight:900;width:150px; " +
-                        "padding-left:15px;\">\r\n               <b style=\"font-weight:bold;\">47BILLION</b> \r\n            </td>\r\n   " +
-                        "\r\n        </tr>\r\n     </ table >\r\n" +
-                        "<!-- Include Google Fonts link for Roboto -->\r\n" +
-                        "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap\">";
-
+                    string htmlHeaderContent = "";
+                    if (File_Paths == "RikiReport.cshtml")
+                    {
+                        htmlHeaderContent = "   <table border-spacing=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" margin-top: 40px; \r\nfont-family: ' Roboto', sans-serif; " +
+                            "background-color: #fff;\">\r\n        " +
+                            "<tr>\r\n            " +
+                            "<td align=\"justify\">\r\n                " +
+                            "<span style=\"background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, rgba(62, 200, 159, 1) 72%, " +
+                            "rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);\r\n            height:1px;width:565px;display:block;\"></span>\r\n           " +
+                            " </td>\r\n            " +
+                            "<td align=\"right\"\r\n                style=\"font-family: 'Roboto', sans-serif;letter-spacing: 3px;font-size:25px;color:#000;font-weight:900;width:150px; " +
+                            "padding-left:15px;\">\r\n               <b style=\"font-weight:bold;\">FORMFREE<span style=\"position: relative; top: -15px; font-size: 5px;\">®</span></b>          </td>\r\n   " +
+                            "\r\n        </tr>\r\n     </ table >\r\n" +
+                            "<!-- Include Google Fonts link for Roboto -->\r\n" +
+                            "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap\">";
+                    }
+                    else
+                    {
+                        htmlHeaderContent = "    <table border-spacing=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" margin-top: 40px;\r\nfont-family: \" " +
+                            "Roboto\", sans-serif;\r\n           background-color: #fff;\r\n       \">\r\n        <tr>\r\n            " +
+                            "<td colspan=\"2\" style=\"font-size: 13px;color:#000;font-family: 'Roboto', sans-serif;\">\r\n                " +
+                            "<span style=\"color:#ccc;font-family: 'Roboto', sans-serif;\">QB TOKEN:</span>\r\n N/A\r\n            </td>\r\n        " +
+                            "</tr>\r\n        <tr>\r\n            <td align=\"justify\">\r\n                " +
+                            "<span style=\"background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, " +
+                            "rgba(62, 200, 159, 1) 72%, rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);\r\n            " +
+                            "height:1px;width:565px;display:block;\"></span>\r\n            </td>\r\n            " +
+                            "<td align=\"right\"\r\n                style=\"font-family: 'Roboto', sans-serif;letter-spacing: 3px;font-size:25px;color:#5c4e4e;" +
+                            "font-weight:550;width:136px; padding-left:15px;\">\r\n                FORMFREE<span style=\"position: relative; top: -15px; font-size: 5px;\">®</span>           " +
+                            " </td>\r\n        </tr>\r\n    </table>\r\n" +
+                            "<!-- Include Google Fonts link for Roboto -->\r\n" +
+                            "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap\">";
+                    }
 
               
 
@@ -195,12 +184,6 @@ namespace JSON_To_PDF.Repository.Services
                 result.Status = true;
                 return result;
 
-                //header
-
-
-                //header
-
-
             }
             catch (Exception ex)
             {
@@ -209,7 +192,12 @@ namespace JSON_To_PDF.Repository.Services
             }
             return result;
             }
-            #endregion
+        #endregion
+
+
+        #region
+            
+        #endregion
 
     }
 
@@ -229,7 +217,7 @@ namespace JSON_To_PDF.Repository.Services
 
             int pageNumber = docEvent.GetDocument().GetPageNumber(docEvent.GetPage());
 
-            if (pageNumber >= 2)
+            if (pageNumber >= 1)
             {
 
                 PdfPage page = docEvent.GetPage();

@@ -5,6 +5,7 @@ namespace JSON_To_PDF.Model
 {
     public class RikiResultSet
     {
+        public string? RequestedReportId { get; set; }
         public string? RikiId { get; set; }
         public Consumer? Consumer { get; set; }
         public List<GroupedTransaction>? GroupedTransactions { get; set; }
@@ -12,6 +13,9 @@ namespace JSON_To_PDF.Model
         public List<Remark>? Remarks { get; set; }
         public List<RecurrentItem>? RecurrentItems { get; set; }
         public List<CalendarMonthStatistic>? CalendarMonthStatistics { get; set; }
+        public List<EmploymentData>? EmploymentData { get; set; }
+        public DateTime DateProcessed { get; set; }
+        public RentVerification RentVerification { get; set; }
     }
 
     public class Consumer
@@ -21,13 +25,27 @@ namespace JSON_To_PDF.Model
         public List<Identifier>? Identifiers { get; set; }
         public string? DateOfBirth { get; set; }
         //public string? Email { get; set; }
-
         public List<string> Email { get; set; }
-
         public string? PhoneNumber { get; set; }
         public Address? Address { get; set; }
         public string? AssociatedCustomerId { get; set; }
         public string? ConsumerId { get; set; }
+    }
+
+    public class EmploymentData
+    {
+        public string EmployerName { get; set; }
+        public DateTime MostRecentDepositDate { get; set; }
+        public float MostRecentDepositAmount { get; set; }
+        public string PayFrequency { get; set; }
+    }
+
+    public class RentVerification
+    {
+        public int NumberConsecutiveRentPayments { get; set; }
+        public float StatedRentAmount { get; set; }
+        public int NumberCandidateRentPayments { get; set; }
+
     }
 
     public class Identifier
@@ -74,20 +92,20 @@ namespace JSON_To_PDF.Model
     public class RikiData
     {
         public string? RIKIasWords { get; set; }
-        public string RIKI { get; set; }
-        public string MonthToMonthStabilityScore { get; set; }
+        public float RIKI { get; set; }
+        public float MonthToMonthStabilityScore { get; set; }
         public float TypicalMonthsTotalIncome { get; set; }
         public float TypicalMonthsUnadjustedAvailableIncome { get; set; }
         public float TypicalMonthsAdjustedAvailableIncome { get; set; }
         public float CashFlowIndex { get; set; }
         public float UnadjustedCashFlowIndex { get; set; }
-        public string UnadjustedRIKI { get; set; }
-        public string ProspectiveRIKI_500 { get; set; }
-        public string TotalMonthlyIncomeTrend { get; set; }
-        public string CashFlowIndexTrend { get; set; }
-        public string CCTrend { get; set; }
-        public string CCChangeTrend { get; set; }
-        public string BankAccountTrend { get; set; }
+        public float UnadjustedRIKI { get; set; }
+        public float ProspectiveRIKI_500 { get; set; }
+        public float TotalMonthlyIncomeTrend { get; set; }
+        public float CashFlowIndexTrend { get; set; }
+        public float CCTrend { get; set; }
+        public float CCChangeTrend { get; set; }
+        public float BankAccountTrend { get; set; }
         public float BankAccountChangeTrend { get; set; }
     }
 
@@ -159,6 +177,14 @@ namespace JSON_To_PDF.Model
         public float CashFlowIndexMonthly { get; set; }
         public float UnadjustedCashFlowIndexMonthly { get; set; }
         public float ProspectiveCashFlowIndexMonthly500 { get; set; }
+    }
+
+    public class DepositeTransaction
+    {
+        public DateTime Date { get; set; }
+        public string AccountNumber { get; set; }
+        public string Description { get; set; }
+        public double Amount { get; set; }
     }
 
 

@@ -2,6 +2,7 @@
 using JSON_To_PDF.Repository.Interfaces;
 using JSON_To_PDF.Validators.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace JSON_To_PDF.Controllers
 {
@@ -92,6 +93,51 @@ namespace JSON_To_PDF.Controllers
                 return BadRequest(exception);
             }
         }
+
+
+        #region
+        [HttpGet]
+        [Route("getLoanList")]
+        public async Task<IActionResult> GetLoanList(int page , int pageSize )
+        {
+            try
+            {
+                if (page > 0 && pageSize > 0)
+                {
+                    var loanDeatils = _mortgageRepository.GetLoanData(page, pageSize);
+                    return Ok(loanDeatils); 
+                }
+                return null;
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception);
+            }
+        }
+
+        [HttpDelete]
+        [Route("deleteLoanRecord")]
+        public async Task<IActionResult> DeleteLoanRecord(int loanid)
+        {
+            try
+            {
+                if(loanid > 0)
+                {
+                  bool deletedStatus =  _mortgageRepository.DeleteLoanRecordById(loanid);
+                    if (deletedStatus)
+                    {
+                        return Ok("Deleted Successfully");
+                    }
+                }
+                return NotFound("Loan record not found");
+
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception);
+            }
+        }
+        #endregion
 
     }
 }

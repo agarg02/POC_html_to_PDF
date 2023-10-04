@@ -35,4 +35,20 @@
         public int Term { get; set; }
     }
 
+
+    public class Loan
+    {
+        public string LoanType { get; set; }
+        public double LoanAmount { get; set; }
+        public double CollateralValue { get; set; }
+        public string LTV { get; set; }
+        public string Terms { get; set; }
+        public double ResidualIncome { get; set; }
+        public float Riki { get; set; }
+        public bool CRA { get; set; }
+        public bool DPA { get; set; }
+        public string Location { get; set; }
+        public bool IsDeleted { get; set; }
+
+    }
 }

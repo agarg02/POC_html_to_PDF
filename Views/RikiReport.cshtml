@@ -5,9 +5,6 @@
 @using JSON_To_PDF.Model;
 @using static JSON_To_PDF.Response.Result;
 
-@*@using TransformService.Models;
-*@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,6 +28,23 @@
             white-space: nowrap;
         }
 
+        /*style="border: 1.5px solid #999; padding: 12px; border-radius: 10px; width: 100%;"*/
+        .table-border {
+            border: 1.5px solid #999;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .td-border{
+            font-family: 'Roboto', sans-serif;
+            font-size: 10px;
+            border-radius: 4px;
+            border: 1.5px solid #ddd;
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+
         tr {
             page-break-inside: avoid;
         }
@@ -38,37 +52,25 @@
 </head>
 <body style="background-color:  white; ">
 
-    <table class="main-table" border-spacing="0" cellpadding="0" cellspacing="0" style="">
-        <tr>
-            <td align="justify">
-                <span style="background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, rgba(62, 200, 159, 1) 72%, rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);
-            height:1px;width:565px;display:block;"></span>
-            </td>
-            <td align="right"
-                style="font-family: 'Roboto', sans-serif;letter-spacing: 3px;font-size:25px;color:#000;font-weight:600;width:150px; padding-left:15px;">
-             <b style="font-weight:bold;">47BILLION</b> 
-            </td>
-        </tr>
-    </table>
 
     <table border-spacing="0" cellpadding="0" cellspacing="0" class="main-table" style="width: 100%;  margin-top : 40px">
         <tr>
             <td colspan="2">
                 <table style="width: 100%">
                     <tr>
-                        <td style="width: 50%; text-align: left; vertical-align: text-top; padding-top: 20px;">
-                            <p style="margin: 0; font-size: 18px; font-weight: 600;">
+                        <td style=" text-align: left; vertical-align: text-top; padding-top: 20px;">
+                            <p style="margin: 0; font-size: 22px; font-weight: 600;">
                                 RIKI™ Report
                             </p>
                             <p style="margin: 0 0 30px; font-size: 17px; color: #ccc;">
                                 Alternative Data Intelligence
                             </p>
-                            <p style="margin: 0; letter-spacing: 1px; font-size: 25px; color: #000; font-weight: 600; font-family: 'Roboto', sans-serif;">
+                            <p style="margin: 0; letter-spacing: 1px; font-size: 30px; color: #000; font-weight: 600; font-family: 'Roboto', sans-serif;">
                                 @Model.Consumer?.FirstName @Model.Consumer?.LastName
                             </p>
                         </td>
                         <td style="width: 50%;  text-align: left;">
-                            <table style="border: 1px solid #999; padding: 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -80,7 +82,7 @@
                                         Report ID
                                     </td>
                                     <td style="padding: 8px 0 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-                                        N/A
+                                        @Model.RequestedReportId
                                     </td>
                                 </tr>
                                 <tr>
@@ -88,7 +90,7 @@
                                         Report Date
                                     </td>
                                     <td style="padding: 8px 0 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-                                        N/A
+                                        @Model.DateProcessed.ToShortDateString()
                                     </td>
                                 </tr>
                                 <tr>
@@ -140,7 +142,7 @@
                 <table style="width: 100%;">
                     <tr>
                         <td style="width: 50%; padding-right: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -174,7 +176,7 @@
                             </table>
                         </td>
                         <td style="width: 50%; padding-left: 10px; white-space: nowrap; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px 42px; border-radius: 10px; width: 100%;">
+                            <table style="border: 1.5px solid #999; padding: 12px 12px 42px; border-radius: 10px; width: 100%;">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -184,7 +186,8 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 35px; font-weight: 500; text-align: center;">
-                                            @Model.RikiData?.CCTrend
+                                           N/A
+
                                         </p>
                                     </td>
                                 </tr>
@@ -206,7 +209,7 @@
                 <table style="width: 100%;">
                     <tr>
                         <td style="width: 50%; padding-right: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2" style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
                                         Cash Flow Index
@@ -215,7 +218,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 35px; font-weight: 500; text-align: center;">
-                                            @Model.RikiData?.CashFlowIndex
+                                           @Model.RikiData?.CashFlowIndex
                                         </p>
                                     </td>
                                 </tr>
@@ -229,7 +232,7 @@
                             </table>
                         </td>
                         <td style="width: 50%; padding-left: 10px; white-space: nowrap; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -246,7 +249,12 @@
                                 <tr>
                                     <td>
                                         <p style="font-size: 11px; margin: 0;">
-                                            Trending up 1.4 points monthly
+                                         @*   @(Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Trending up {@Model.RikiData?.CashFlowIndexTrend} points monthly" :
+                                                $"Trending down {@Model.RikiData?.CashFlowIndexTrend} points monthly")*@
+
+                                                  @(float.IsNaN(Model.RikiData?.CashFlowIndexTrend) ? @Model.RikiData?.CashFlowIndexTrend :
+                                                (Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Trending up {@Model.RikiData?.CashFlowIndexTrend} points monthly" :
+                                                    $"Trending down {@Model.RikiData?.CashFlowIndexTrend} points monthly"))
                                         </p>
                                     </td>
                                 </tr>
@@ -301,56 +309,29 @@
 
                         @*days in month start*@
                         <tr>
-                            <td style="
-                                  font-family: 'Roboto', sans-serif;
-                                  font-size: 10px;
-                                  border-radius: 4px;
-                                  border: 1px solid #ddd;
-                                  padding: 5px 10px;
-                                  white-space: nowrap;
-                                ">
+                            <td class="td-border">
                                 Days in Month
                             </td>
 
                             @{
-                                //decimal totalValue = 0;
-                                //int totalCount = 0;
-
                                 @foreach (var headerdate in FilteredValue)
                                 {
                                     @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
+                                            <td class="td-border" style="text-align: right;
                                                         ">
                                                 @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].DaysInMonth
                                             </td>
-                                            //++totalCount;
-                                            //totalValue += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].DaysInMonth;
                                         }
 
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
+                                <td class="td-border" style="text-align: right;
                                                         ">
 
                                 </td>
-            //@Math.Round((totalValue / totalCount), 2)
                             }
 
                         </tr>
@@ -358,14 +339,7 @@
 
                         @*@MonthlyDataCompleteness start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 Data Completeness
                             </td>
 
@@ -378,15 +352,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                 font-family: 'Roboto', sans-serif;
-                                                  font-size: 10px;
-                                                  border-radius: 4px;
-                                                  border: 1px solid #ddd;
-                                                  padding: 5px 10px;
-                                                  white-space: nowrap;
-                                                  text-align: right;
-                                                ">
+                                            <td class="td-border" style=" text-align: right;">
                                                 @Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].MonthlyDataCompleteness, 2)
                                             </td>
                                             ++totalCountMonthlyDataCompleteness;
@@ -394,15 +360,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     @Math.Round((totalValueMonthlyDataCompleteness / totalCountMonthlyDataCompleteness),2)
                                 </td>
                             }
@@ -411,14 +369,7 @@
 
                         @*AccountsTracked start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 # Accounts Tracked
                             </td>
 
@@ -431,15 +382,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                 font-family: 'Roboto', sans-serif;
-                                                  font-size: 10px;
-                                                  border-radius: 4px;
-                                                  border: 1px solid #ddd;
-                                                  padding: 5px 10px;
-                                                  white-space: nowrap;
-                                                  text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].AccountsTracked
                                             </td>
                                             ++totalCountAccountsTracked;
@@ -447,15 +390,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     @Math.Round((totalValueAccountsTracked / totalCountAccountsTracked), 2)
                                 </td>
                             }
@@ -464,14 +399,7 @@
 
                         @*IncomeTransactions start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border"">
                                 # Income Transactions
                             </td>
 
@@ -484,15 +412,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                  font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                            <td class="td-border" style="text-align: right;">
                                                 @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].IncomeTransactions
                                             </td>
                                             ++totalCountIncomeTransactions;
@@ -500,15 +420,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
 
                                     @Math.Round((totalValueIncomeTransactions / totalCountIncomeTransactions), 2)
                                 </td>
@@ -519,14 +431,7 @@
 
                         @*ExpenseTransactions start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border" ">
                                 # Expense Transactions
                             </td>
 
@@ -539,15 +444,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                    ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].ExpenseTransactions
                                             </td>
                                             ++totalCountExpenseTransactions;
@@ -555,15 +452,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     $@Math.Round((totalValueExpenseTransactions / totalCountExpenseTransactions), 2)
                                 </td>
                             }
@@ -573,14 +462,7 @@
 
                         @*TotalAmountIncomeTransactions start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border"">
                                 Total Income
                             </td>
 
@@ -593,15 +475,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountIncomeTransactions
                                             </td>
                                             ++totalCountTotalAmountIncomeTransactions;
@@ -609,15 +483,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
 
                                     $@Math.Round((totalValueTotalAmountIncomeTransactions / totalCountTotalAmountIncomeTransactions), 2)
                                 </td>
@@ -628,14 +494,7 @@
 
                         @*TotalAmountExpenseTransactions start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border" ">
                                 Total Expenses
                             </td>
 
@@ -648,15 +507,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountExpenseTransactions
                                             </td>
                                             ++totalCountTotalAmountExpenseTransactions;
@@ -664,15 +515,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     $@Math.Round((totalValueTotalAmountExpenseTransactions / totalCountTotalAmountExpenseTransactions), 2)
                                 </td>
                             }
@@ -682,14 +525,7 @@
 
                         @*Total Money Handled start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 Total Money Handled
                             </td>
                             @foreach (var headerdate in FilteredValue)
@@ -698,29 +534,13 @@
                                 {
                                     if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                     {
-                                        <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                        <td class="td-border" style="text-align: right;">
                                             -
                                         </td>
                                     }
                                 }
                             }
-                            <td style="
-                                                              font-family: 'Roboto', sans-serif;
-                                                              font-size: 10px;
-                                                              border-radius: 4px;
-                                                              border: 1px solid #ddd;
-                                                              padding: 5px 10px;
-                                                              white-space: nowrap;
-                                                              text-align: right;
-                                                            ">
+                            <td class="td-border" style="text-align: right;">
                             </td>
 
                         </tr>
@@ -728,14 +548,7 @@
 
                         @*LargestSingleTransactionNotAcctToAcctTransfers start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 Largest Transaction
                             </td>
 
@@ -748,15 +561,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].LargestSingleTransactionNotAcctToAcctTransfers
                                             </td>
                                             ++totalCountLargestSingleTransactionNotAcctToAcctTransfers;
@@ -764,15 +569,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     $@Math.Round((totalValueLargestSingleTransactionNotAcctToAcctTransfers / totalCountLargestSingleTransactionNotAcctToAcctTransfers), 2)
                                 </td>
                             }
@@ -781,14 +578,7 @@
 
                         @*EstimatedDiscretionarySpending start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 Discretionary Spending
                             </td>
 
@@ -801,15 +591,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].EstimatedDiscretionarySpending, 2)
                                             </td>
                                             ++totalCountEstimatedDiscretionarySpending;
@@ -817,15 +599,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     $@Math.Round((totalValueEstimatedDiscretionarySpending / totalCountEstimatedDiscretionarySpending),2)
                                 </td>
                             }
@@ -834,14 +608,7 @@
 
                         @*% Disc. Spending start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 % Disc. Spending
                             </td>
                             @foreach (var headerdate in FilteredValue)
@@ -850,43 +617,20 @@
                                 {
                                     if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                     {
-                                        <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                        <td class="td-border" style="text-align: right;">
                                             -
                                         </td>
                                     }
                                 }
                             }
-                            <td style="
-                                                              font-family: 'Roboto', sans-serif;
-                                                              font-size: 10px;
-                                                              border-radius: 4px;
-                                                              border: 1px solid #ddd;
-                                                              padding: 5px 10px;
-                                                              white-space: nowrap;
-                                                              text-align: right;
-                                                            ">
+                            <td class="td-border" style="text-align: right;">
                             </td>
                         </tr>
                         @*% Disc. Spending end*@
 
                         @*UnadjustedAvailableIncome start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border"">
                                 Available Income
                             </td>
 
@@ -899,15 +643,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].UnadjustedAvailableIncome, 2)
 
                                             </td>
@@ -916,15 +652,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     $@Math.Round((totalValueUnadjustedAvailableIncome / totalCountUnadjustedAvailableIncome),2)
                                 </td>
                             }
@@ -933,14 +661,7 @@
 
                         @*AdjustedAvailableIncome start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border" ">
                                 Adjusted Av. Income
                             </td>
 
@@ -953,15 +674,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AdjustedAvailableIncome, 2)
 
                                             </td>
@@ -970,15 +683,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     $@Math.Round((totalValueAdjustedAvailableIncome / totalCountAdjustedAvailableIncome),2)
                                 </td>
                             }
@@ -987,14 +692,7 @@
 
                         @*AvgDailySpending start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 Average Daily Spend
                             </td>
 
@@ -1007,15 +705,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AvgDailySpending, 2)
 
                                             </td>
@@ -1024,15 +714,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td style="text-align: right;" class="td-border">
                                     $@Math.Round((totalValueAvgDailySpending / totalCountAvgDailySpending),2)
                                 </td>
                             }
@@ -1041,14 +723,7 @@
 
                         @*IncomeExpenseRatio start*@
                         <tr>
-                            <td style="
-                  font-family: 'Roboto', sans-serif;
-                  font-size: 10px;
-                  border-radius: 4px;
-                  border: 1px solid #ddd;
-                  padding: 5px 10px;
-                  white-space: nowrap;
-                ">
+                            <td class="td-border">
                                 Income/Expense Ratio
                             </td>
 
@@ -1061,15 +736,7 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                    font-family: 'Roboto', sans-serif;
-                                                      font-size: 10px;
-                                                      border-radius: 4px;
-                                                      border: 1px solid #ddd;
-                                                      padding: 5px 10px;
-                                                      white-space: nowrap;
-                                                      text-align: right;
-                                                ">
+                                            <td class="td-border" style="text-align: right;">
                                                 @Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[0].IncomeExpenseRatio, 2)
 
                                             </td>
@@ -1078,15 +745,7 @@
                                         }
                                     }
                                 }
-                                <td style="
-                                                          font-family: 'Roboto', sans-serif;
-                                                          font-size: 10px;
-                                                          border-radius: 4px;
-                                                          border: 1px solid #ddd;
-                                                          padding: 5px 10px;
-                                                          white-space: nowrap;
-                                                          text-align: right;
-                                                        ">
+                                <td class="td-border" style="text-align: right;">
                                     @Math.Round((totalValueIncomeExpenseRatio / totalCountIncomeExpenseRatio),2)
                                 </td>
                             }
@@ -1095,14 +754,7 @@
 
                         @*RIKI*@
                         <tr>
-                            <td style="
-                      font-family: 'Roboto', sans-serif;
-                      font-size: 10px;
-                      border-radius: 4px;
-                      border: 1px solid #ddd;
-                      padding: 5px 10px;
-                      white-space: nowrap;
-                    ">
+                            <td class="td-border">
                                 RIKI
                             </td>
 
@@ -1114,30 +766,14 @@
                                     {
                                         if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
                                         {
-                                            <td style="
-                                                            font-family: 'Roboto', sans-serif;
-                                                              font-size: 10px;
-                                                              border-radius: 4px;
-                                                              border: 1px solid #ddd;
-                                                              padding: 5px 10px;
-                                                              white-space: nowrap;
-                                                              text-align: right;
-                                                        ">
-                                                @Model.RikiData.RIKI
+                                            <td class="td-border" style="text-align: right;">
+                                                @Math.Round(@Model.RikiData?.RIKI, 2)
 
                                             </td>
                                         }
                                     }
                                 }
-                                <td style="
-                                                                  font-family: 'Roboto', sans-serif;
-                                                                  font-size: 10px;
-                                                                  border-radius: 4px;
-                                                                  border: 1px solid #ddd;
-                                                                  padding: 5px 10px;
-                                                                  white-space: nowrap;
-                                                                  text-align: right;
-                                                                ">
+                                <td class="td-border" style="text-align: right;">
                                 </td>
                             }
                         </tr>
@@ -1165,7 +801,7 @@
                 <table width: 100%;>
                     <tr>
                         <td style="width: 33.3%; padding-right: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2" style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
                                         Typical Monthly Income
@@ -1196,7 +832,7 @@
                             </table>
                         </td>
                         <td style="width: 33.3%; padding-right: 10px; padding-left: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -1220,7 +856,7 @@
                             </table>
                         </td>
                         <td style="width: 33.3%; padding-right: 10px; padding-left: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -1268,7 +904,7 @@
                 <table style="width: 100%;">
                     <tr>
                         <td style="width: 33.3%; padding-right: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2" style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
                                         Consecutive Recognized Payments
@@ -1277,7 +913,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            N/A
+                                            @Model.RentVerification.NumberConsecutiveRentPayments
                                         </p>
                                     </td>
                                 </tr>
@@ -1291,7 +927,7 @@
                             </table>
                         </td>
                         <td style="width: 33.3%; padding-right: 10px; padding-left: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -1301,7 +937,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            N/A
+                                            @Model.RentVerification.NumberCandidateRentPayments
                                         </p>
                                     </td>
                                 </tr>
@@ -1315,7 +951,7 @@
                             </table>
                         </td>
                         <td style="width: 33.3%; padding-right: 10px; padding-left: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2" style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
                                         Stated Rent Amount
@@ -1324,7 +960,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            N/A
+                                            @Model.RentVerification.StatedRentAmount
                                         </p>
                                     </td>
                                 </tr>
@@ -1343,7 +979,7 @@
         </tr>
         <tr>
             <td colspan="2" style="padding: 0;">
-                <table style="width: 100%; border-spacing: 5px;">
+                <table style="width: 100%; border-spacing: 5px;padding-bottom:25px">
                     <tr>
                         <th style="font-family: 'Roboto', sans-serif; text-align: left; font-weight: 500; border-radius: 4px; padding: 5px 10px; background-color: #919191; color: #fff; font-size: 11px;">
                             Date
@@ -1359,12 +995,13 @@
                         </th>
 
                     </tr>
-
+                    
+                    @*rent table*@
                     @if (@Model.GroupedTransactions != null && @Model.GroupedTransactions.Count != 0)
                     {
                         @foreach (var grouptransaction in @Model.GroupedTransactions)
                         {
-                            @if (@grouptransaction.GroupedAccountData != null && @grouptransaction.GroupedAccountData.Count != 0)
+                            @if (@grouptransaction.GroupType.Split("__")[0] == "RENT" && @grouptransaction.GroupedAccountData != null && @grouptransaction.GroupedAccountData.Count != 0)
                             {
                                 @foreach (var groupaccountdata in grouptransaction.GroupedAccountData)
                                 {
@@ -1374,19 +1011,19 @@
                                         {
                                             <tr>
                                                 <td style="font-family: 'Roboto' , sans-serif;font-size: 11px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
+                            border:1.5px solid #ddd;padding:5px 10px;">
                                                     @transaction.Date.ToShortDateString()
                                                 </td>
                                                 <td style=" font-family: 'Roboto' , sans-serif;font-size: 11px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
+                            border:1.5px solid #ddd;padding:5px 10px;">
                                                     $ @transaction.Amount
                                                 </td>
                                                 <td style="font-family: 'Roboto' , sans-serif;font-size: 11px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
+                            border:1.5px solid #ddd;padding:5px 10px;">
                                                     @groupaccountdata.AccountNumber
                                                 </td>
                                                 <td style="font-family: 'Roboto' , sans-serif;font-size: 11px;border-radius: 4px;
-                            border:1px solid #ddd;padding:5px 10px;">
+                            border:1.5px solid #ddd;padding:5px 10px;">
                                                     @transaction.Description
                                                 </td>
                                             </tr>
@@ -1396,6 +1033,8 @@
                             }
                         }
                     }
+                    @*rent table*@
+
                 </table>
             </td>
         </tr>
@@ -1411,7 +1050,7 @@
                 <table style="width: 100%;">
                     <tr>
                         <td style="width: 50%; padding-right: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2"
                                         style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
@@ -1435,10 +1074,10 @@
                             </table>
                         </td>
                         <td style="width: 50%; padding-left: 10px; vertical-align: text-top;">
-                            <table style="border: 1px solid #999; padding: 12px 12px; border-radius: 10px; width: 100%;">
+                            <table class="table-border">
                                 <tr>
                                     <td colspan="2" style="background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(93, 31, 201, 1) 0%, rgba(180, 78, 218, 1) 100%);padding: 6px 10px 7px;border-radius: 4px;color: #fff;font-size: 11px;font-family: 'Roboto', sans-serif;">
-                                        Average Montly Utility Payment
+                                        Average Monthly Utility Payment
                                     </td>
                                 </tr>
                                 <tr>
@@ -1479,7 +1118,7 @@
                                     foreach (var transaction in groupedaccountdata.Transactions)
                                     {
                                         if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate)
-                                        && UniqueFormattedOtherDates.Count < 10)
+                                        && UniqueFormattedOtherDates.Count < 8)
                                         {
                                             string formattedDate = parsedDate.ToString("MMM-yy");
                                             bool exists = UniqueFormattedOtherDates.Any(value => value.FormattedValue == formattedDate);
@@ -1512,68 +1151,6 @@
                         </tr>
                         //upadted header sep-8
 
-
-                        //old header sep -8
-                        //<tr>
-                        //    <th></th>
-                        //    @foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        //    {
-                        //        @if (groupedtransaction.GroupType.Split("__")[0] != "INCOME" && groupedtransaction.GroupType.Split("__")[0] != "EXPENSES" &&
-                        //       groupedtransaction.GroupedAccountData.Count > 0)
-                        //        {
-                        //            @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
-                        //            {
-
-                        //                @if (@groupedaccountdata.Transactions.Count > 0)
-                        //                {
-
-                        //                    @foreach (var transactions in @groupedaccountdata.Transactions)
-                        //                    {
-
-                        //                        if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-                        //                        && UniqueFormattedOtherDates.Count < 12)
-                        //                        {
-                        //                            string formattedDate = parsedDate.ToString("MMM-yy");
-
-
-                        //                            bool exists = UniqueFormattedOtherDates.Any(value => value.FormattedValue == formattedDate);
-
-
-                        //                            @if (!exists)
-                        //                            {
-                        //                                HeaderResponse uniqueformatteddate = new HeaderResponse();
-
-
-                        //                                uniqueformatteddate.ActualValue = transactions.Date;
-                        //                                uniqueformatteddate.FormattedValue = formattedDate;
-                        //                                UniqueFormattedOtherDates.Add(uniqueformatteddate);
-
-                        //                                <th style="
-                        //                                          font-family: 'Roboto', sans-serif;
-                        //                                          text-align: center;
-                        //                                          font-weight: 500;
-                        //                                            font-size: 10px;
-                        //                                          border-radius: 4px;
-                        //                                          background-color: #919191;
-                        //                                          color: #fff;
-                        //                                          white-space: nowrap;
-                        //                                        ">
-                        //                                    @formattedDate
-                        //                                </th>
-                        //                            }
-
-                        //                        }
-                        //                    }
-
-                        //                }
-
-                        //            }
-                        //        }
-                        //    }
-                        //</tr>
-                        // old header sep-8
-
-
                         @*other data binding start*@
 
                         //updated data binding -sep 8
@@ -1582,93 +1159,34 @@
                         {
                             var splitGroupTypeName = groupedtransaction.GroupType.Replace("__", " ").Replace("_", " ");
                             <tr>
-                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap;">@splitGroupTypeName</td>
-                                @foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
-                                {
-                                    @foreach (var headervalue in UniqueFormattedOtherDates)
-                                    {
-                                        var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions)
-                                        .FirstOrDefault(x => x.Date.Year == headervalue.ActualValue.Year && x.Date.Month == headervalue.ActualValue.Month);
+                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; 
+                                width:5% !important">@splitGroupTypeName</td>
 
-                                        <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
-                                            @(filteredData != null ? $"${filteredData.Amount}" : "-")
-                                        </td>
+
+                                @foreach (var headervalue in UniqueFormattedOtherDates)
+                                {
+
+                                        var filteredData = from gad in (IEnumerable<dynamic>)groupedtransaction.GroupedAccountData
+                                                           where gad.Transactions.Count > 0
+                                                           from transaction in (IEnumerable<dynamic>)gad.Transactions
+                                                           where transaction.Date.Year == headervalue.ActualValue.Year && transaction.Date.Month == headervalue.ActualValue.Month
+                                                           select transaction;
+
+
+                                    float totalAmount = float.NaN;
+                                    if(@filteredData.Count() > 0){
+
+                                       totalAmount = (float)Math.Round((filteredData.Sum(z => (float)z.Amount)), 2);
                                     }
+
+                                    <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
+                                        @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
+                                    </td>
+
                                 }
                             </tr>
                         }
                         //updated data binding - sep 8
-
-                        //old data binding -sep 8
-                        //@foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        //{
-                        //    @if (groupedtransaction.GroupType.Split("__")[0] != "INCOME" && groupedtransaction.GroupType.Split("__")[0] != "EXPENSES"
-                        //   && groupedtransaction.GroupedAccountData.Count > 0 && UniqueFormattedOtherDates.Count > 0)
-                        //    {
-                        //        var splitGroupTypeName = (groupedtransaction.GroupType.Replace("__", " ")).Replace("_"," ");
-
-                        //        <tr>
-                        //            <td style="
-                        //                  font-family: 'Roboto', sans-serif;
-                        //                  font-size: 9px;
-                        //                  border-radius: 4px;
-                        //                  border: 1px solid #ddd;
-                        //                  padding: 5px 10px;
-                        //                  white-space: nowrap;
-                        //                ">
-                        //                @splitGroupTypeName
-                        //            </td>
-                        //            @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
-                        //            {
-
-                        //                @if (@groupedaccountdata.Transactions.Count > 0)
-                        //                {
-
-                        //                    @foreach (var headervalue in UniqueFormattedOtherDates)
-                        //                    {
-
-                        //                        var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions).FirstOrDefault(x => x.Date.Year ==
-                        //                        headervalue.ActualValue.Year && x.Date.Month ==
-                        //                        headervalue.ActualValue.Month);
-
-                        //                        if (filteredData != null)
-                        //                        {
-                        //                            <td style="
-                        //                                      font-family: 'Roboto', sans-serif;
-                        //                                      font-size: 9px;
-                        //                                      border-radius: 4px;
-                        //                                      border: 1px solid #ddd;
-                        //                                      padding: 5px 10px;
-                        //                                      white-space: nowrap;
-                        //                                      text-align: right;
-                        //                                    ">
-                        //                                @filteredData.Amount
-                        //                            </td>
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            <td style="
-                        //                                      font-family: 'Roboto', sans-serif;
-                        //                                      font-size: 9px;
-                        //                                      border-radius: 4px;
-                        //                                      border: 1px solid #ddd;
-                        //                                      padding: 5px 10px;
-                        //                                      white-space: nowrap;
-                        //                                      text-align: right;
-                        //                                    ">
-                        //                                -
-                        //                            </td>
-                        //                        }
-                        //                    }
-
-                        //                }
-
-                        //            }
-
-                        //        </tr>
-                        //    }
-                        //}
-                        //old data binding -sep 8
 
                         @*other data binding end*@
                     }
@@ -1693,7 +1211,7 @@
         <tr>
             <td colspan="2">
                 @*Income table start*@
-                <table class="calender-table" style="width: 80%; border-spacing: 5px;">
+                <table class="calender-table" style="width: 100%; border-spacing: 5px;">
                     @{
                         List<HeaderResponse> UniqueFormattedIncomeDates = new List<HeaderResponse>();
                         
@@ -1706,8 +1224,9 @@
                                 {
                                     foreach (var transaction in groupedaccountdata.Transactions)
                                     {
-                                        if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate)
-                                        && UniqueFormattedIncomeDates.Count < 10)
+                                        if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, 
+                                        DateTimeStyles.None, out DateTime parsedDate)
+                                        && UniqueFormattedIncomeDates.Count < 8)
                                         {
                                             string formattedDate = parsedDate.ToString("MMM-yy");
                                             bool exists = UniqueFormattedIncomeDates.Any(value => value.FormattedValue == formattedDate);
@@ -1718,92 +1237,34 @@
                                                 uniqueformatteddate.ActualValue = transaction.Date;
                                                 uniqueformatteddate.FormattedValue = formattedDate;
                                                 UniqueFormattedIncomeDates.Add(uniqueformatteddate);
-
-                                                <th style="
-                                      font-family: 'Roboto', sans-serif;
-                                      text-align: center;
-                                      font-weight: 500;
-                                      font-size: 9px;
-                                      border-radius: 4px;
-                                      background-color: #919191;
-                                      color: #fff;
-                                      white-space: nowrap;
-                                    ">
-                                                    @formattedDate
-                                                </th>
                                             }
                                         }
                                     }
                                 }
                             }
 
+                            @{
+                                UniqueFormattedIncomeDates = UniqueFormattedIncomeDates.OrderBy(date => date.ActualValue).ToList();
+                                foreach (var incomeheader in UniqueFormattedIncomeDates)
+                                {
+
+                                    <th style="
+                                                  font-family: 'Roboto', sans-serif;
+                                                  text-align: center;
+                                                  font-weight: 500;
+                                                  font-size: 9px;
+                                                  border-radius: 4px;
+                                                  background-color: #919191;
+                                                  color: #fff;
+                                                  white-space: nowrap;
+                                                ">
+                                        @incomeheader.FormattedValue
+                                    </th>
+                                }
+                            }
+
                         </tr>
                         //updated header - sep8
-
-
-                        //old header -sep 8
-
-                        //<tr>
-                        //    <th></th>
-
-                        //    @foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        //    {
-                        //        @if (groupedtransaction.GroupType.Split("__")[0] == "INCOME" && groupedtransaction.GroupedAccountData.Count > 0)
-                        //        {
-                        //            @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
-                        //            {
-
-                        //                @if (@groupedaccountdata.Transactions.Count > 0)
-                        //                {
-
-                        //                    @foreach (var transactions in @groupedaccountdata.Transactions)
-                        //                    {
-
-                        //                        if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-                        //                        && UniqueFormattedIncomeDates.Count < 10)
-                        //                        {
-                        //                            string formattedDate = parsedDate.ToString("MMM-yy");
-
-
-                        //                            bool exists = UniqueFormattedIncomeDates.Any(value => value.FormattedValue == formattedDate);
-
-
-                        //                            @if (!exists)
-                        //                            {
-                        //                                HeaderResponse uniqueformatteddate = new HeaderResponse();
-
-
-                        //                                uniqueformatteddate.ActualValue = transactions.Date;
-                        //                                uniqueformatteddate.FormattedValue = formattedDate;
-                        //                                UniqueFormattedIncomeDates.Add(uniqueformatteddate);
-
-                        //                                <th style="
-                        //                                          font-family: 'Roboto', sans-serif;
-                        //                                          text-align: center;
-                        //                                          font-weight: 500;
-                        //                                            font-size: 10px;
-                        //                                          border-radius: 4px;
-                        //                                          background-color: #919191;
-                        //                                          color: #fff;
-                        //                                          white-space: nowrap;
-                        //                                        ">
-                        //                                    @formattedDate
-                        //                                </th>
-                        //                            }
-
-                        //                        }
-                        //                    }
-
-                        //                }
-
-                        //            }
-                        //        }
-                        //    }
-
-                        //</tr>
-
-                        //old header -sep 8
-
 
                         @*Income data binding start*@
 
@@ -1813,94 +1274,34 @@
                         {
                             var splitGroupTypeName = groupedtransaction.GroupType.Replace("__", " ").Replace("_", " ").Replace("INCOME", "");
                             <tr>
-                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap;">@splitGroupTypeName</td>
-                                @foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
+                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px;
+                                   width:5% !important">@splitGroupTypeName</td>
+                                @foreach(var headervalue in UniqueFormattedIncomeDates)
                                 {
-                                    @foreach (var headervalue in UniqueFormattedIncomeDates)
-                                    {
-                                        var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions)
-                                        .FirstOrDefault(x => x.Date.Year == headervalue.ActualValue.Year && x.Date.Month == headervalue.ActualValue.Month);
 
-                                        <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
-                                            @(filteredData != null ? $"${filteredData.Amount}" : "-")
-                                        </td>
+                                    var filteredData = from gad in (IEnumerable<dynamic>)groupedtransaction.GroupedAccountData
+                                                       where gad.Transactions.Count > 0
+                                                       from transaction in (IEnumerable<dynamic>)gad.Transactions
+                                                       where transaction.Date.Year == headervalue.ActualValue.Year && transaction.Date.Month == headervalue.ActualValue.Month
+                                                       select transaction;
+
+
+                                    float totalAmount = float.NaN;
+                                    if (@filteredData.Count() > 0)
+                                    {
+                                        totalAmount = (float)Math.Round((filteredData.Sum(z => (float)z.Amount)), 2);
                                     }
-                                }
+
+
+                                            <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
+                                                 @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
+                                                </td>
+                                    }
+
                             </tr>
                         }
 
                         //updated data binding - sep 8
-
-
-                        //old data binding - sep 8
-                        //@foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        //{
-                        //    @if (groupedtransaction.GroupType.Split("__")[0] == "INCOME" && groupedtransaction.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0)
-                        //    {
-                        //        var splitGroupTypeName = ((@groupedtransaction.GroupType.Replace("__", " ")).Replace("_", " ")).Replace("INCOME", "");
-
-                        //        <tr>
-                        //            <td style="
-                        //                  font-family: 'Roboto', sans-serif;
-                        //                  font-size: 9px;
-                        //                  border-radius: 4px;
-                        //                  border: 1px solid #ddd;
-                        //                  padding: 5px 10px;
-                        //                  white-space: nowrap;
-                        //                ">
-                        //                @splitGroupTypeName
-                        //            </td>
-                        //            @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
-                        //            {
-
-                        //                @if (@groupedaccountdata.Transactions.Count > 0)
-                        //                {
-
-                        //                    @foreach (var headervalue in UniqueFormattedIncomeDates)
-                        //                    {
-
-                        //                        var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions).FirstOrDefault(x => x.Date.Year ==
-                        //                        headervalue.ActualValue.Year && x.Date.Month ==
-                        //                        headervalue.ActualValue.Month);
-
-                        //                        if (filteredData != null)
-                        //                        {
-                        //                            <td style="
-                        //                                      font-family: 'Roboto', sans-serif;
-                        //                                      font-size: 9px;
-                        //                                      border-radius: 4px;
-                        //                                      border: 1px solid #ddd;
-                        //                                      padding: 5px 10px;
-                        //                                      white-space: nowrap;
-                        //                                      text-align: right;
-                        //                                    ">
-                        //                                $@filteredData.Amount
-                        //                            </td>
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            <td style="
-                        //                                      font-family: 'Roboto', sans-serif;
-                        //                                      font-size: 9px;
-                        //                                      border-radius: 4px;
-                        //                                      border: 1px solid #ddd;
-                        //                                      padding: 5px 10px;
-                        //                                      white-space: nowrap;
-                        //                                      text-align: right;
-                        //                                    ">
-                        //                                -
-                        //                            </td>
-                        //                        }
-                        //                    }
-
-                        //                }
-
-                        //            }
-
-                        //        </tr>
-                        //    }
-                        //}
-                        //old data binding - sep 8
 
                         @*Income data binding end*@
                     }
@@ -1937,7 +1338,7 @@
                                     foreach (var transaction in groupedaccountdata.Transactions)
                                     {
                                         if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate)
-                                        && UniqueFormattedExpenseDates.Count < 10)
+                                        && UniqueFormattedExpenseDates.Count < 8)
                                         {
                                             string formattedDate = parsedDate.ToString("MMM-yy");
                                             bool exists = UniqueFormattedExpenseDates.Any(value => value.FormattedValue == formattedDate);
@@ -1948,182 +1349,70 @@
                                                 uniqueformatteddate.ActualValue = transaction.Date;
                                                 uniqueformatteddate.FormattedValue = formattedDate;
                                                 UniqueFormattedExpenseDates.Add(uniqueformatteddate);
-
-                                                <th style="
-                                  font-family: 'Roboto', sans-serif;
-                                  text-align: center;
-                                  font-weight: 500;
-                                  font-size: 9px;
-                                  border-radius: 4px;
-                                  background-color: #919191;
-                                  color: #fff;
-                                  white-space: nowrap;
-                                ">
-                                                    @formattedDate
-                                                </th>
                                             }
                                         }
                                     }
+
                                 }
                             }
 
-                        </tr>
+                            @{
+                            UniqueFormattedExpenseDates = UniqueFormattedExpenseDates.OrderBy(date => date.ActualValue).ToList();
+                            @foreach (var expenseheader in UniqueFormattedExpenseDates)
+                            {
+
+                            <th style="
+                                                      font-family: 'roboto', sans-serif;
+                                                      text-align: center;
+                                                      font-weight: 500;
+                                                      font-size: 9px;
+                                                      border-radius: 4px;
+                                                      background-color: #919191;
+                                                      color: #fff;
+                                                      white-space: nowrap;
+                                                    ">
+                                @expenseheader.FormattedValue
+                            </th>
+                            }
+                            }
+
+
+                         </tr>
                         //updated header - sep 8
 
-
-                        //old header -sep 8
-                        //<tr>
-                        //    <th></th>
-
-
-                        //    @foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        //    {
-                        //        @if (groupedtransaction.GroupType.Split("__")[0] == "EXPENSES" && groupedtransaction.GroupedAccountData.Count > 0)
-                        //        {
-                        //            @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
-                        //            {
-
-                        //                @if (@groupedaccountdata.Transactions.Count > 0)
-                        //                {
-
-                        //                    @foreach (var transactions in @groupedaccountdata.Transactions)
-                        //                    {
-
-                        //                        if ((DateTime.TryParseExact(transactions.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-                        //                        && UniqueFormattedExpenseDates.Count < 10)
-                        //                        {
-                        //                            string formattedDate = parsedDate.ToString("MMM-yy");
-
-
-                        //                            bool exists = UniqueFormattedExpenseDates.Any(value => value.FormattedValue == formattedDate);
-
-                        //                            @if (!exists)
-                        //                            {
-                        //                                HeaderResponse uniqueformatteddate = new HeaderResponse();
-
-                        //                                uniqueformatteddate.ActualValue = transactions.Date;
-                        //                                uniqueformatteddate.FormattedValue = formattedDate;
-                        //                                UniqueFormattedExpenseDates.Add(uniqueformatteddate);
-
-                        //                                <th style="
-                        //                                          font-family: 'Roboto', sans-serif;
-                        //                                          text-align: center;
-                        //                                          font-weight: 500;
-                        //                                            font-size: 9px;
-                        //                                          border-radius: 4px;
-                        //                                          background-color: #919191;
-                        //                                          color: #fff;
-                        //                                          white-space: nowrap;
-                        //                                        ">
-                        //                                    @formattedDate
-                        //                                </th>
-
-                        //                            }
-
-                        //                        }
-                        //                    }
-
-                        //                }
-
-                        //            }
-                        //        }
-                        //    } 
-
-                        //</tr>
-                        //old header - sep 8
 
                         @*Expense data bindng start*@
 
                         //updated data binding - sep 8
-                        @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] == "EXPENSES" && gt.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0))
+                        @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] == "EXPENSES" 
+                        && gt.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0))
                         {
                             var splitGroupTypeName = groupedtransaction.GroupType.Replace("__", " ").Replace("_", " ").Replace("EXPENSES", "");
                             <tr>
-                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap;">@splitGroupTypeName</td>
-                                @foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
+                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; 
+                                width:5% !important">@splitGroupTypeName</td>
+                                @foreach (var headervalue in UniqueFormattedExpenseDates)
                                 {
-                                    @foreach (var headervalue in UniqueFormattedExpenseDates)
-                                    {
-                                        var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions)
-                                        .FirstOrDefault(x => x.Date.Year == headervalue.ActualValue.Year && x.Date.Month == headervalue.ActualValue.Month);
+                                    var filteredData = from gad in (IEnumerable<dynamic>)groupedtransaction.GroupedAccountData
+                                                       where gad.Transactions.Count > 0
+                                                       from transaction in (IEnumerable<dynamic>)gad.Transactions
+                                                       where transaction.Date.Year == headervalue.ActualValue.Year && transaction.Date.Month == headervalue.ActualValue.Month
+                                                       select transaction;
 
-                                        <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
-                                            @(filteredData != null ? $"${filteredData.Amount}" : "-")
-                                        </td>
+                                    float totalAmount = float.NaN;
+                                    if (@filteredData.Count() > 0)
+                                    {
+                                        totalAmount = (float)Math.Round((filteredData.Sum(z => (float)z.Amount)), 2);
                                     }
+
+                                        <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
+                                        @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
+                                        </td>
                                 }
                             </tr>
                         }
                         //updated data binding  -sep 8
-
-                        //old data binding - sep 8
-                        //@foreach (var groupedtransaction in @Model.GroupedTransactions)
-                        //{
-                        //    @if (groupedtransaction.GroupType.Split("__")[0] == "EXPENSES" && groupedtransaction.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0)
-                        //    {
-                        //        var splitGroupTypeName = ((@groupedtransaction.GroupType.Replace("__", " ")).Replace("_", " ")).Replace("EXPENSES", "");
-                        //        <tr>
-                        //            <td style="
-                        //                  font-family: 'Roboto', sans-serif;
-                        //                  font-size: 9px;
-                        //                  border-radius: 4px;
-                        //                  border: 1px solid #ddd;
-                        //                  padding: 5px 10px;
-                        //                  white-space: nowrap;
-                        //                ">
-                        //                @splitGroupTypeName
-                        //            </td>
-                        //            @foreach (var groupedaccountdata in @groupedtransaction.GroupedAccountData)
-                        //            {
-
-                        //                @if (@groupedaccountdata.Transactions.Count > 0)
-                        //                {
-
-                        //                    @foreach (var headervalue in UniqueFormattedExpenseDates)
-                        //                    {
-
-                        //                        var filteredData = ((IEnumerable<dynamic>)groupedaccountdata.Transactions).FirstOrDefault(x => x.Date.Year ==
-                        //                        headervalue.ActualValue.Year && x.Date.Month ==
-                        //                        headervalue.ActualValue.Month);
-
-                        //                        if (filteredData != null)
-                        //                        {
-                        //                            <td style="
-                        //                                      font-family: 'Roboto', sans-serif;
-                        //                                      font-size: 9px;
-                        //                                      border-radius: 4px;
-                        //                                      border: 1px solid #ddd;
-                        //                                      padding: 5px 10px;
-                        //                                      white-space: nowrap;
-                        //                                      text-align: right;
-                        //                                    ">
-                        //                                $@filteredData.Amount
-                        //                            </td>
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            <td style="
-                        //                                      font-family: 'Roboto', sans-serif;
-                        //                                      font-size: 9px;
-                        //                                      border-radius: 4px;
-                        //                                      border: 1px solid #ddd;
-                        //                                      padding: 5px 10px;
-                        //                                      white-space: nowrap;
-                        //                                      text-align: right;
-                        //                                    ">
-                        //                                -
-                        //                            </td>
-                        //                        }
-                        //                    }
-                        //                }
-
-                        //            }
-
-                        //        </tr>
-                        //    }
-                        //}
-                        //old data binding
-                        
+                                                
                         @*Expense data binding end*@
                     }
                 </table>
