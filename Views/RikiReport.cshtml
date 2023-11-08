@@ -36,7 +36,7 @@
             width: 100%;
         }
 
-        .td-border{
+        .td-border {
             font-family: 'Roboto', sans-serif;
             font-size: 10px;
             border-radius: 4px;
@@ -66,7 +66,7 @@
                                 Alternative Data Intelligence
                             </p>
                             <p style="margin: 0; letter-spacing: 1px; font-size: 30px; color: #000; font-weight: 600; font-family: 'Roboto', sans-serif;">
-                                @Model.Consumer?.FirstName @Model.Consumer?.LastName
+                                @(Model.Consumer != null ? $"{Model.Consumer?.FirstName} {Model.Consumer?.LastName}" : "N/A")
                             </p>
                         </td>
                         <td style="width: 50%;  text-align: left;">
@@ -82,7 +82,7 @@
                                         Report ID
                                     </td>
                                     <td style="padding: 8px 0 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-                                        @Model.RequestedReportId
+                                        @(Model.RequestedReportId != null ? $"{Model.RequestedReportId}" : "N/A")
                                     </td>
                                 </tr>
                                 <tr>
@@ -90,7 +90,7 @@
                                         Report Date
                                     </td>
                                     <td style="padding: 8px 0 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-                                        @Model.DateProcessed.ToShortDateString()
+                                        @(Model.DateProcessed != null ? $"{Model.DateProcessed.ToShortDateString()}" : "N/A")
                                     </td>
                                 </tr>
                                 <tr>
@@ -98,7 +98,7 @@
                                         Email
                                     </td>
                                     <td style="padding: 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-                                        @Model.Consumer?.Email[0]
+                                        @(Model.Consumer != null && Model.Consumer?.Email.Count > 0 ? $"{Model.Consumer?.Email[0]}" : "N/A")
                                     </td>
                                 </tr>
                                 <tr>
@@ -106,7 +106,7 @@
                                         Phone Number
                                     </td>
                                     <td style="padding: 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-                                        @Model.Consumer?.PhoneNumber
+                                        @(Model.Consumer != null ? $"{Model.Consumer?.PhoneNumber}" : "N/A")
                                     </td>
                                 </tr>
                                 <tr>
@@ -114,11 +114,14 @@
                                         History Available
                                     </td>
                                     <td style="padding: 5px 0; font-size: 11px; font-family: 'Roboto', sans-serif;">
-
                                         @{
-                                            TimeSpan difference = @Model.CalendarMonthStatistics[0].LastDayOfLastFullMonthCovered -
-                                            @Model.CalendarMonthStatistics[0].BeginningOfFirstMonth;
-                                            int numberOfDays = (int)difference.TotalDays;
+                                            string numberOfDays = "N/A";
+                                            @if (Model.CalendarMonthStatistics!= null && Model.CalendarMonthStatistics.Count > 0)
+                                            {
+                                                TimeSpan difference = @Model.CalendarMonthStatistics[0].LastDayOfLastFullMonthCovered -
+                                                @Model.CalendarMonthStatistics[0].BeginningOfFirstMonth;
+                                                numberOfDays = difference.TotalDays.ToString();
+                                            }
                                         }
                                         @numberOfDays Days
 
@@ -152,14 +155,14 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 35px; font-weight: 500; text-align: center;">
-                                            @Model.RikiData?.RIKI
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.RIKI}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <p style="font-size: 11px; margin: 0; font-weight: 500;">
-                                            @Model.RikiData?.RIKIasWords
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.RIKIasWords}" : "N/A")
 
                                         </p>
                                     </td>
@@ -186,7 +189,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 35px; font-weight: 500; text-align: center;">
-                                           N/A
+                                            N/A
 
                                         </p>
                                     </td>
@@ -218,7 +221,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 35px; font-weight: 500; text-align: center;">
-                                           @Model.RikiData?.CashFlowIndex
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.CashFlowIndex}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -242,19 +245,19 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 35px; font-weight: 500; text-align: center;">
-                                            @Model.RikiData?.CashFlowIndexTrend
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.CashFlowIndexTrend}" : "N/A")
+
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <p style="font-size: 11px; margin: 0;">
-                                         @*   @(Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Trending up {@Model.RikiData?.CashFlowIndexTrend} points monthly" :
-                                                $"Trending down {@Model.RikiData?.CashFlowIndexTrend} points monthly")*@
 
-                                                  @(float.IsNaN(Model.RikiData?.CashFlowIndexTrend) ? @Model.RikiData?.CashFlowIndexTrend :
-                                                (Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Trending up {@Model.RikiData?.CashFlowIndexTrend} points monthly" :
-                                                    $"Trending down {@Model.RikiData?.CashFlowIndexTrend} points monthly"))
+                                            @(Model.RikiData != null ? (float.IsNaN(Model.RikiData?.CashFlowIndexTrend) ? @Model.RikiData?.CashFlowIndexTrend :
+                                                (Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Up {@Model.RikiData?.CashFlowIndexTrend} points monthly" :
+                                                $"Down {@Model.RikiData?.CashFlowIndexTrend} points monthly")) : "N/A"
+                                                )
                                         </p>
                                     </td>
                                 </tr>
@@ -271,519 +274,634 @@
                 <table class="calender-table" style="width: 100%; padding-top:5px; border-spacing: 5px;">
                     @{
                         List<HeaderResponse> UniqueFormattedDates = new List<HeaderResponse>();
-                        List<HeaderResponse> FilteredValue;
+                        List<HeaderResponse> FilteredValue = new List<HeaderResponse>();
+                        @if (@Model.CalendarMonthStatistics != null)
+                        {
+                            @*header start*@
+                            <tr style="font-family: 'Roboto', sans-serif;width:max-content">
+                                <th></th>
 
-                        @*header start*@
-                        <tr style="font-family: 'Roboto', sans-serif;width:max-content">
-                            <th></th>
-
-                            @foreach (var calendar in @Model.CalendarMonthStatistics)
-                            {
-                                DateTime parsedDate;
-                                if (DateTime.TryParseExact(calendar.Label, "M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                                @foreach (var calendar in @Model.CalendarMonthStatistics)
                                 {
-                                    string formattedDate = parsedDate.ToString("MMM-yy");
+                                    DateTime parsedDate;
+                                    if (DateTime.TryParseExact(calendar.Label, "M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                                    {
+                                        string formattedDate = parsedDate.ToString("MMM-yy");
 
-                                    HeaderResponse uniqueformatteddate = new HeaderResponse();
-                                    uniqueformatteddate.ActualValue = DateTime.ParseExact(calendar.Label, "MM/yyyy", null);
-                                    uniqueformatteddate.FormattedValue = formattedDate;
-                                    UniqueFormattedDates.Add(uniqueformatteddate);
+                                        HeaderResponse uniqueformatteddate = new HeaderResponse();
+                                        uniqueformatteddate.ActualValue = DateTime.ParseExact(calendar.Label, "MM/yyyy", null);
+                                        uniqueformatteddate.FormattedValue = formattedDate;
+                                        UniqueFormattedDates.Add(uniqueformatteddate);
+                                    }
                                 }
-                            }
 
-                            @{
-                                FilteredValue = (UniqueFormattedDates.OrderByDescending(date => date.ActualValue).Take(6).ToList()).OrderBy(date => date.ActualValue).ToList();
-                          
-                                @foreach (var filter in FilteredValue)
+                                @if (UniqueFormattedDates.Count > 0)
                                 {
+                                    FilteredValue = (UniqueFormattedDates.OrderByDescending(date => date.ActualValue).Take(6).ToList()).OrderBy(date => date.ActualValue).ToList();
+
+                                    @foreach (var filter in FilteredValue)
+                                    {
+                                        <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
+                                            @filter.FormattedValue
+                                        </th>
+                                    }
                                     <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                        @filter.FormattedValue
+                                        Avg
                                     </th>
                                 }
-                                <th style="font-family: 'Roboto', sans-serif; text-align: right; font-weight: 500; border-radius: 4px; background-color: #919191; color: #fff;">
-                                    Avg
-                                </th>
-                            }
-                        </tr>
-                        @*HeaderDictionary end*@
 
-                        @*days in month start*@
-                        <tr>
-                            <td class="td-border">
-                                Days in Month
-                            </td>
+                            </tr>
+                            @*HeaderDictionary end*@
 
-                            @{
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
-                                        {
-                                            <td class="td-border" style="text-align: right;
-                                                        ">
-                                                @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].DaysInMonth
-                                            </td>
-                                        }
-
-                                    }
-                                }
-                                <td class="td-border" style="text-align: right;
-                                                        ">
-
+                            @*days in month start*@
+                            <tr>
+                                <td class="td-border">
+                                    Days in Month
                                 </td>
-                            }
 
-                        </tr>
-                        @*days in month end*@
-
-                        @*@MonthlyDataCompleteness start*@
-                        <tr>
-                            <td class="td-border">
-                                Data Completeness
-                            </td>
-
-                            @{
-                                decimal totalValueMonthlyDataCompleteness = 0;
-                                int totalCountMonthlyDataCompleteness = 0;
-                                @foreach (var headerdate in FilteredValue)
+                                @if (FilteredValue.Count > 0)
                                 {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                    @foreach (var headerdate in FilteredValue)
                                     {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
                                         {
-                                            <td class="td-border" style=" text-align: right;">
-                                                @Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].MonthlyDataCompleteness, 2)
-                                            </td>
-                                            ++totalCountMonthlyDataCompleteness;
-                                            totalValueMonthlyDataCompleteness += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].MonthlyDataCompleteness;
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;
+                                                            ">
+                                                        @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].DaysInMonth
+                                                    </td>
+                                                }
+                                            }
                                         }
                                     }
+                                    <td class="td-border" style="text-align: right;
+                                                            ">
+                                    </td>
                                 }
-                                <td class="td-border" style="text-align: right;">
-                                    @Math.Round((totalValueMonthlyDataCompleteness / totalCountMonthlyDataCompleteness),2)
+
+                            </tr>
+                            @*days in month end*@
+
+                            @*@MonthlyDataCompleteness start*@
+                            <tr>
+                                <td class="td-border">
+                                    Data Completeness
                                 </td>
-                            }
-                        </tr>
-                        @*MonthlyDataCompleteness end*@
 
-                        @*AccountsTracked start*@
-                        <tr>
-                            <td class="td-border">
-                                # Accounts Tracked
-                            </td>
-
-                            @{
-                                decimal totalValueAccountsTracked = 0;
-                                int totalCountAccountsTracked = 0;
-                                @foreach (var headerdate in FilteredValue)
+                                @if (FilteredValue.Count > 0)
                                 {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                    decimal totalValueMonthlyDataCompleteness = 0;
+                                    int totalCountMonthlyDataCompleteness = 0;
+                                    @foreach (var headerdate in FilteredValue)
                                     {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].AccountsTracked
-                                            </td>
-                                            ++totalCountAccountsTracked;
-                                            totalValueAccountsTracked += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].AccountsTracked;
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style=" text-align: right;">
+                                                        @Math.Round(Convert.ToDecimal(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].MonthlyDataCompleteness), 2)
+                                                    </td>
+                                                    ++totalCountMonthlyDataCompleteness;
+                                                    totalValueMonthlyDataCompleteness += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].MonthlyDataCompleteness;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    @Math.Round((totalValueAccountsTracked / totalCountAccountsTracked), 2)
-                                </td>
-                            }
-                        </tr>
-                        @*AccountsTracked end*@
-
-                        @*IncomeTransactions start*@
-                        <tr>
-                            <td class="td-border"">
-                                # Income Transactions
-                            </td>
-
-                            @{
-                                decimal totalValueIncomeTransactions = 0;
-                                int totalCountIncomeTransactions = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountMonthlyDataCompleteness != 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].IncomeTransactions
-                                            </td>
-                                            ++totalCountIncomeTransactions;
-                                            totalValueIncomeTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].IncomeTransactions;
+                                            @Math.Round(Convert.ToDecimal(totalValueMonthlyDataCompleteness / totalCountMonthlyDataCompleteness),2)
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            @*MonthlyDataCompleteness end*@
+
+                            @*AccountsTracked start*@
+                            <tr>
+                                <td class="td-border">
+                                    # Accounts Tracked
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueAccountsTracked = 0;
+                                    int totalCountAccountsTracked = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].AccountsTracked
+                                                    </td>
+                                                    ++totalCountAccountsTracked;
+                                                    totalValueAccountsTracked += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].AccountsTracked;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                <td class="td-border" style="text-align: right;">
-
-                                    @Math.Round((totalValueIncomeTransactions / totalCountIncomeTransactions), 2)
-                                </td>
-                            }
-
-                        </tr>
-                        @*IncomeTransactions end*@
-
-                        @*ExpenseTransactions start*@
-                        <tr>
-                            <td class="td-border" ">
-                                # Expense Transactions
-                            </td>
-
-                            @{
-                                decimal totalValueExpenseTransactions = 0;
-                                int totalCountExpenseTransactions = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountAccountsTracked != 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].ExpenseTransactions
-                                            </td>
-                                            ++totalCountExpenseTransactions;
-                                            totalValueExpenseTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].ExpenseTransactions;
+                                            @Math.Round(Convert.ToDecimal(totalValueAccountsTracked / totalCountAccountsTracked), 2)
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            @*AccountsTracked end*@
+
+                            @*IncomeTransactions start*@
+                            <tr>
+                                <td class="td-border" ">
+                                    # Income Transactions
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueIncomeTransactions = 0;
+                                    int totalCountIncomeTransactions = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        @Model.CalendarMonthStatistics[index].MonthlyStatistics[index].IncomeTransactions
+                                                    </td>
+                                                    ++totalCountIncomeTransactions;
+                                                    totalValueIncomeTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].IncomeTransactions;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    $@Math.Round((totalValueExpenseTransactions / totalCountExpenseTransactions), 2)
-                                </td>
-                            }
-
-                        </tr>
-                        @*ExpenseTransactions end*@
-
-                        @*TotalAmountIncomeTransactions start*@
-                        <tr>
-                            <td class="td-border"">
-                                Total Income
-                            </td>
-
-                            @{
-                                decimal totalValueTotalAmountIncomeTransactions = 0;
-                                int totalCountTotalAmountIncomeTransactions = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountIncomeTransactions != 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountIncomeTransactions
-                                            </td>
-                                            ++totalCountTotalAmountIncomeTransactions;
-                                            totalValueTotalAmountIncomeTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountIncomeTransactions;
+                                            @Math.Round(Convert.ToDecimal(totalValueIncomeTransactions / totalCountIncomeTransactions), 2)
+                                        }
+                                    </td>
+                                }
+
+                            </tr>
+                                @*IncomeTransactions end*@
+
+                                @*ExpenseTransactions start*@
+                            <tr>
+                                <td class="td-border" ">
+                                    # Expense Transactions
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueExpenseTransactions = 0;
+                                    int totalCountExpenseTransactions = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].ExpenseTransactions
+                                                    </td>
+                                                    ++totalCountExpenseTransactions;
+                                                    totalValueExpenseTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].ExpenseTransactions;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                <td class="td-border" style="text-align: right;">
-
-                                    $@Math.Round((totalValueTotalAmountIncomeTransactions / totalCountTotalAmountIncomeTransactions), 2)
-                                </td>
-                            }
-
-                        </tr>
-                        @*TotalAmountIncomeTransactions end*@
-
-                        @*TotalAmountExpenseTransactions start*@
-                        <tr>
-                            <td class="td-border" ">
-                                Total Expenses
-                            </td>
-
-                            @{
-                                decimal totalValueTotalAmountExpenseTransactions = 0;
-                                int totalCountTotalAmountExpenseTransactions = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountExpenseTransactions != 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountExpenseTransactions
-                                            </td>
-                                            ++totalCountTotalAmountExpenseTransactions;
-                                            totalValueTotalAmountExpenseTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountExpenseTransactions;
+                                            @Math.Round(Convert.ToDecimal(totalValueExpenseTransactions / totalCountExpenseTransactions), 2)
+                                            //$
+
+                                        }
+                                    </td>
+                                }
+
+                            </tr>
+                            @*ExpenseTransactions end*@
+
+                            @*TotalAmountIncomeTransactions start*@
+                            <tr>
+                                <td class="td-border" ">
+                                    Total Income
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueTotalAmountIncomeTransactions = 0;
+                                    int totalCountTotalAmountIncomeTransactions = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountIncomeTransactions
+                                                    </td>
+                                                    ++totalCountTotalAmountIncomeTransactions;
+                                                    totalValueTotalAmountIncomeTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountIncomeTransactions;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    $@Math.Round((totalValueTotalAmountExpenseTransactions / totalCountTotalAmountExpenseTransactions), 2)
-                                </td>
-                            }
-
-                        </tr>
-                        @*TotalAmountExpenseTransactions end*@
-
-                        @*Total Money Handled start*@
-                        <tr>
-                            <td class="td-border">
-                                Total Money Handled
-                            </td>
-                            @foreach (var headerdate in FilteredValue)
-                            {
-                                @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                {
-                                    if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
-                                    {
-                                        <td class="td-border" style="text-align: right;">
-                                            -
-                                        </td>
-                                    }
-                                }
-                            }
-                            <td class="td-border" style="text-align: right;">
-                            </td>
-
-                        </tr>
-                        @*Total Money Handled end*@
-
-                        @*LargestSingleTransactionNotAcctToAcctTransfers start*@
-                        <tr>
-                            <td class="td-border">
-                                Largest Transaction
-                            </td>
-
-                            @{
-                                decimal totalValueLargestSingleTransactionNotAcctToAcctTransfers = 0;
-                                int totalCountLargestSingleTransactionNotAcctToAcctTransfers = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountTotalAmountIncomeTransactions != 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].LargestSingleTransactionNotAcctToAcctTransfers
-                                            </td>
-                                            ++totalCountLargestSingleTransactionNotAcctToAcctTransfers;
-                                            totalValueLargestSingleTransactionNotAcctToAcctTransfers += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].LargestSingleTransactionNotAcctToAcctTransfers;
+                                            @Math.Round(Convert.ToDecimal(totalValueTotalAmountIncomeTransactions / totalCountTotalAmountIncomeTransactions), 2)
+                                            //$
+
+                                        }
+                                    </td>
+                                }
+
+                            </tr>
+                                @*TotalAmountIncomeTransactions end*@
+
+                                @*TotalAmountExpenseTransactions start*@
+                            <tr>
+                                <td class="td-border" ">
+                                    Total Expenses
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueTotalAmountExpenseTransactions = 0;
+                                    int totalCountTotalAmountExpenseTransactions = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountExpenseTransactions
+                                                    </td>
+                                                    ++totalCountTotalAmountExpenseTransactions;
+                                                    totalValueTotalAmountExpenseTransactions += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].TotalAmountExpenseTransactions;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    $@Math.Round((totalValueLargestSingleTransactionNotAcctToAcctTransfers / totalCountLargestSingleTransactionNotAcctToAcctTransfers), 2)
-                                </td>
-                            }
-                        </tr>
-                        @*LargestSingleTransactionNotAcctToAcctTransfers end*@
-
-                        @*EstimatedDiscretionarySpending start*@
-                        <tr>
-                            <td class="td-border">
-                                Discretionary Spending
-                            </td>
-
-                            @{
-                                decimal totalValueEstimatedDiscretionarySpending = 0;
-                                int totalCountEstimatedDiscretionarySpending = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountTotalAmountExpenseTransactions != 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].EstimatedDiscretionarySpending, 2)
-                                            </td>
-                                            ++totalCountEstimatedDiscretionarySpending;
-                                            totalValueEstimatedDiscretionarySpending += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].EstimatedDiscretionarySpending;
+                                            @Math.Round(Convert.ToDecimal(totalValueTotalAmountExpenseTransactions / totalCountTotalAmountExpenseTransactions), 2)
+                                            //$
                                         }
-                                    }
+                                    </td>
                                 }
-                                <td class="td-border" style="text-align: right;">
-                                    $@Math.Round((totalValueEstimatedDiscretionarySpending / totalCountEstimatedDiscretionarySpending),2)
+
+                            </tr>
+                            @*TotalAmountExpenseTransactions end*@
+
+                            @*Total Money Handled start*@
+                            <tr>
+                                <td class="td-border">
+                                    Total Money Handled
                                 </td>
-                            }
-                        </tr>
-                        @*EstimatedDiscretionarySpending end*@
-
-                        @*% Disc. Spending start*@
-                        <tr>
-                            <td class="td-border">
-                                % Disc. Spending
-                            </td>
-                            @foreach (var headerdate in FilteredValue)
-                            {
-                                @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                @if (FilteredValue.Count > 0)
                                 {
-                                    if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                    @foreach (var headerdate in FilteredValue)
                                     {
-                                        <td class="td-border" style="text-align: right;">
-                                            -
-                                        </td>
-                                    }
-                                }
-                            }
-                            <td class="td-border" style="text-align: right;">
-                            </td>
-                        </tr>
-                        @*% Disc. Spending end*@
-
-                        @*UnadjustedAvailableIncome start*@
-                        <tr>
-                            <td class="td-border"">
-                                Available Income
-                            </td>
-
-                            @{
-                                decimal totalValueUnadjustedAvailableIncome = 0;
-                                int totalCountUnadjustedAvailableIncome = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
                                         {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].UnadjustedAvailableIncome, 2)
-
-                                            </td>
-                                            ++totalCountUnadjustedAvailableIncome;
-                                            totalValueUnadjustedAvailableIncome += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].UnadjustedAvailableIncome;
-                                        }
-                                    }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    $@Math.Round((totalValueUnadjustedAvailableIncome / totalCountUnadjustedAvailableIncome),2)
-                                </td>
-                            }
-                        </tr>
-                        @*UnadjustedAvailableIncome end*@
-
-                        @*AdjustedAvailableIncome start*@
-                        <tr>
-                            <td class="td-border" ">
-                                Adjusted Av. Income
-                            </td>
-
-                            @{
-                                decimal totalValueAdjustedAvailableIncome = 0;
-                                int totalCountAdjustedAvailableIncome = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
-                                        {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AdjustedAvailableIncome, 2)
-
-                                            </td>
-                                            ++totalCountAdjustedAvailableIncome;
-                                            totalValueAdjustedAvailableIncome += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AdjustedAvailableIncome;
-                                        }
-                                    }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    $@Math.Round((totalValueAdjustedAvailableIncome / totalCountAdjustedAvailableIncome),2)
-                                </td>
-                            }
-                        </tr>
-                        @*AdjustedAvailableIncome end*@
-
-                        @*AvgDailySpending start*@
-                        <tr>
-                            <td class="td-border">
-                                Average Daily Spend
-                            </td>
-
-                            @{
-                                decimal totalValueAvgDailySpending = 0;
-                                int totalCountAvgDailySpending = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
-                                        {
-                                            <td class="td-border" style="text-align: right;">
-                                                $@Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AvgDailySpending, 2)
-
-                                            </td>
-                                            ++totalCountAvgDailySpending;
-                                            totalValueAvgDailySpending += (decimal)(decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AvgDailySpending;
-                                        }
-                                    }
-                                }
-                                <td style="text-align: right;" class="td-border">
-                                    $@Math.Round((totalValueAvgDailySpending / totalCountAvgDailySpending),2)
-                                </td>
-                            }
-                        </tr>
-                        @*AvgDailySpending end*@
-
-                        @*IncomeExpenseRatio start*@
-                        <tr>
-                            <td class="td-border">
-                                Income/Expense Ratio
-                            </td>
-
-                            @{
-                                decimal totalValueIncomeExpenseRatio = 0;
-                                int totalCountIncomeExpenseRatio = 0;
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
-                                        {
-                                            <td class="td-border" style="text-align: right;">
-                                                @Math.Round(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[0].IncomeExpenseRatio, 2)
-
-                                            </td>
-                                            ++totalCountIncomeExpenseRatio;
-                                            totalValueIncomeExpenseRatio += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[0].IncomeExpenseRatio;
-                                        }
-                                    }
-                                }
-                                <td class="td-border" style="text-align: right;">
-                                    @Math.Round((totalValueIncomeExpenseRatio / totalCountIncomeExpenseRatio),2)
-                                </td>
-                            }
-                        </tr>
-                        @*IncomeExpenseRatio end*@
-
-                        @*RIKI*@
-                        <tr>
-                            <td class="td-border">
-                                RIKI
-                            </td>
-
-                            @{
-                           
-                                @foreach (var headerdate in FilteredValue)
-                                {
-                                    @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
-                                    {
-                                        if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
-                                        {
-                                            <td class="td-border" style="text-align: right;">
-                                                @Math.Round(@Model.RikiData?.RIKI, 2)
-
-                                            </td>
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        -
+                                                    </td>
+                                                }
+                                            }
                                         }
                                     }
                                 }
                                 <td class="td-border" style="text-align: right;">
                                 </td>
-                            }
-                        </tr>
-                        @*RIKI*@
 
+                            </tr>
+                            @*Total Money Handled end*@
+
+                            @*LargestSingleTransactionNotAcctToAcctTransfers start*@
+                            <tr>
+                                <td class="td-border">
+                                    Largest Transaction
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueLargestSingleTransactionNotAcctToAcctTransfers = 0;
+                                    int totalCountLargestSingleTransactionNotAcctToAcctTransfers = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].LargestSingleTransactionNotAcctToAcctTransfers
+                                                    </td>
+                                                    ++totalCountLargestSingleTransactionNotAcctToAcctTransfers;
+                                                    totalValueLargestSingleTransactionNotAcctToAcctTransfers += (decimal)@Model.CalendarMonthStatistics[index].MonthlyStatistics[index].LargestSingleTransactionNotAcctToAcctTransfers;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountLargestSingleTransactionNotAcctToAcctTransfers != 0)
+                                        {
+                                            @Math.Round(Convert.ToDecimal(totalValueLargestSingleTransactionNotAcctToAcctTransfers / totalCountLargestSingleTransactionNotAcctToAcctTransfers), 2)
+                                            //$
+                                        }
+
+                                    </td>
+                                }
+                            </tr>
+                            @*LargestSingleTransactionNotAcctToAcctTransfers end*@
+
+                            @*EstimatedDiscretionarySpending start*@
+                            <tr>
+                                <td class="td-border">
+                                    Discretionary Spending
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueEstimatedDiscretionarySpending = 0;
+                                    int totalCountEstimatedDiscretionarySpending = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Math.Round(Convert.ToDecimal(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].EstimatedDiscretionarySpending), 2)
+                                                    </td>
+                                                    ++totalCountEstimatedDiscretionarySpending;
+                                                    totalValueEstimatedDiscretionarySpending += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].EstimatedDiscretionarySpending;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountEstimatedDiscretionarySpending != 0)
+                                        {
+                                            @Math.Round(Convert.ToDecimal(totalValueEstimatedDiscretionarySpending / totalCountEstimatedDiscretionarySpending),2)
+                                            //$
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            @*EstimatedDiscretionarySpending end*@
+
+                            @*% Disc. Spending start*@
+                            <tr>
+                                <td class="td-border">
+                                    % Disc. Spending
+                                </td>
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        -
+                                                    </td>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                <td class="td-border" style="text-align: right;">
+                                </td>
+                            </tr>
+                            @*% Disc. Spending end*@
+
+                            @*UnadjustedAvailableIncome start*@
+                            <tr>
+                                <td class="td-border" ">
+                                    Available Income
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueUnadjustedAvailableIncome = 0;
+                                    int totalCountUnadjustedAvailableIncome = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Math.Round(Convert.ToDecimal(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].UnadjustedAvailableIncome), 2)
+
+                                                    </td>
+                                                    ++totalCountUnadjustedAvailableIncome;
+                                                    totalValueUnadjustedAvailableIncome += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].UnadjustedAvailableIncome;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountUnadjustedAvailableIncome != 0)
+                                        {
+                                            @Math.Round(Convert.ToDecimal(totalValueUnadjustedAvailableIncome / totalCountUnadjustedAvailableIncome),2)
+                                            //$
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                                @*UnadjustedAvailableIncome end*@
+
+                                @*AdjustedAvailableIncome start*@
+                            <tr>
+                                <td class="td-border" ">
+                                    Adjusted Av. Income
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueAdjustedAvailableIncome = 0;
+                                    int totalCountAdjustedAvailableIncome = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Math.Round(Convert.ToDecimal(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AdjustedAvailableIncome), 2)
+
+                                                    </td>
+                                                    ++totalCountAdjustedAvailableIncome;
+                                                    totalValueAdjustedAvailableIncome += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AdjustedAvailableIncome;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountAdjustedAvailableIncome != 0)
+                                        {
+                                            @Math.Round(Convert.ToDecimal(totalValueAdjustedAvailableIncome / totalCountAdjustedAvailableIncome),2)
+                                            //$
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            @*AdjustedAvailableIncome end*@
+
+                            @*AvgDailySpending start*@
+                            <tr>
+                                <td class="td-border">
+                                    Average Daily Spend
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueAvgDailySpending = 0;
+                                    int totalCountAvgDailySpending = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        $@Math.Round(Convert.ToDecimal(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AvgDailySpending), 2)
+
+                                                    </td>
+                                                    ++totalCountAvgDailySpending;
+                                                    totalValueAvgDailySpending += (decimal)(decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[index].AvgDailySpending;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td style="text-align: right;" class="td-border">
+                                        @if (totalCountAvgDailySpending != 0)
+                                        {
+                                            @Math.Round(Convert.ToDecimal(totalValueAvgDailySpending / totalCountAvgDailySpending),2)
+                                            //$
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            @*AvgDailySpending end*@
+
+                            @*IncomeExpenseRatio start*@
+                            <tr>
+                                <td class="td-border">
+                                    Income/Expense Ratio
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+                                    decimal totalValueIncomeExpenseRatio = 0;
+                                    int totalCountIncomeExpenseRatio = 0;
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (@Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        @Math.Round(Convert.ToDecimal(@Model.CalendarMonthStatistics[index].MonthlyAnalyses[0].IncomeExpenseRatio), 2)
+
+                                                    </td>
+                                                    ++totalCountIncomeExpenseRatio;
+                                                    totalValueIncomeExpenseRatio += (decimal)@Model.CalendarMonthStatistics[index].MonthlyAnalyses[0].IncomeExpenseRatio;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="td-border" style="text-align: right;">
+                                        @if (totalCountIncomeExpenseRatio != 0)
+                                        {
+                                            @Math.Round(Convert.ToDecimal(totalValueIncomeExpenseRatio / totalCountIncomeExpenseRatio),2)
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            @*IncomeExpenseRatio end*@
+
+                            @*RIKI*@
+                            <tr>
+                                <td class="td-border">
+                                    RIKI
+                                </td>
+
+                                @if (FilteredValue.Count > 0)
+                                {
+
+                                    @foreach (var headerdate in FilteredValue)
+                                    {
+                                        if (@Model.CalendarMonthStatistics.Count > 0)
+                                        {
+                                            @for (int index = 0; index < @Model.CalendarMonthStatistics.Count; index++)
+                                            {
+                                                if (Model.RikiData != null && @Model.CalendarMonthStatistics[index].Label == headerdate.ActualValue.ToString("MM/yyyy"))
+                                                {
+                                                    <td class="td-border" style="text-align: right;">
+                                                        @Math.Round((float)(@Model.RikiData?.RIKI), 2)
+
+                                                    </td>
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="td-border" style="text-align: right;">
+                                    </td>
+                                }
+                            </tr>
+                            @*RIKI*@
+                        }
                     }
                 </table>
                 @*daysinmonth table end*@
             </td>
         </tr>
+
         <tr>
             <td align="center" colspan="2" style="padding: 30px 0;">
                 <span style="background: linear-gradient(90deg, rgba(193, 139, 64, 0) -30%, rgba(193, 57, 19, 1) 27%, rgba(36, 112, 230, 1) 46%, rgba(62, 200, 159, 1) 72%, rgba(47, 237, 237, 1) 100%, rgba(245, 250, 255, 1) 100%);height: 1px;display: block;"></span>
@@ -810,7 +928,7 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            $ @Model.RikiData?.TypicalMonthsTotalIncome
+                                            $ @(Model.RikiData != null ? $"{Model.RikiData?.TypicalMonthsTotalIncome}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -842,7 +960,8 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            $ @Model.RikiData?.TypicalMonthsAdjustedAvailableIncome
+                                            $ @(Model.RikiData != null ? $"{Model.RikiData?.TypicalMonthsAdjustedAvailableIncome}" : "N/A")
+
                                         </p>
                                     </td>
                                 </tr>
@@ -866,7 +985,8 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            @Model.RikiData?.MonthToMonthStabilityScore
+                                            $ @(Model.RikiData != null ? $"{Model.RikiData?.MonthToMonthStabilityScore}" : "N/A")
+
                                         </p>
                                     </td>
                                 </tr>
@@ -913,7 +1033,8 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            @Model.RentVerification.NumberConsecutiveRentPayments
+                                            $ @(Model.RentVerification != null ? $"{Model.RentVerification?.NumberConsecutiveRentPayments}" : "N/A")
+
                                         </p>
                                     </td>
                                 </tr>
@@ -937,7 +1058,8 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            @Model.RentVerification.NumberCandidateRentPayments
+                                            @(Model.RentVerification != null ? $"{Model.RentVerification?.NumberCandidateRentPayments}" : "N/A")
+
                                         </p>
                                     </td>
                                 </tr>
@@ -960,7 +1082,8 @@
                                 <tr>
                                     <td style="padding: 15px 0;">
                                         <p style="color: #777; margin: 0; font-size: 30px; font-weight: 500; text-align: center; font-family: 'Roboto', sans-serif;">
-                                            @Model.RentVerification.StatedRentAmount
+                                            @(Model.RentVerification != null ? $"{Model.RentVerification?.StatedRentAmount}" : "N/A")
+
                                         </p>
                                     </td>
                                 </tr>
@@ -995,7 +1118,7 @@
                         </th>
 
                     </tr>
-                    
+
                     @*rent table*@
                     @if (@Model.GroupedTransactions != null && @Model.GroupedTransactions.Count != 0)
                     {
@@ -1110,38 +1233,40 @@
                         //updated header sep -8
                         <tr>
                             <th></th>
-                            @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] != "INCOME"
-                        && gt.GroupType.Split("__")[0] != "EXPENSES" && gt.GroupedAccountData.Count > 0))
-                            {
-                                foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
+                            @if (Model.GroupedTransactions != null && Model.GroupedTransactions.Count > 0){
+                                @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] != "INCOME"
+                                    && gt.GroupType.Split("__")[0] != "EXPENSES" && gt.GroupedAccountData.Count > 0))
                                 {
-                                    foreach (var transaction in groupedaccountdata.Transactions)
+                                    foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
                                     {
-                                        if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate)
-                                        && UniqueFormattedOtherDates.Count < 8)
+                                        foreach (var transaction in groupedaccountdata.Transactions)
                                         {
-                                            string formattedDate = parsedDate.ToString("MMM-yy");
-                                            bool exists = UniqueFormattedOtherDates.Any(value => value.FormattedValue == formattedDate);
-
-                                            if (!exists)
+                                            if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate)
+                                            && UniqueFormattedOtherDates.Count < 8)
                                             {
-                                                HeaderResponse uniqueformatteddate = new HeaderResponse();
-                                                uniqueformatteddate.ActualValue = transaction.Date;
-                                                uniqueformatteddate.FormattedValue = formattedDate;
-                                                UniqueFormattedOtherDates.Add(uniqueformatteddate);
+                                                string formattedDate = parsedDate.ToString("MMM-yy");
+                                                bool exists = UniqueFormattedOtherDates.Any(value => value.FormattedValue == formattedDate);
 
-                                                <th style="
-                                          font-family: 'Roboto', sans-serif;
-                                          text-align: center;
-                                          font-weight: 500;
-                                          font-size: 9px;
-                                          border-radius: 4px;
-                                          background-color: #919191;
-                                          color: #fff;
-                                          white-space: nowrap;
-                                        ">
-                                                    @formattedDate
-                                                </th>
+                                                if (!exists)
+                                                {
+                                                    HeaderResponse uniqueformatteddate = new HeaderResponse();
+                                                    uniqueformatteddate.ActualValue = transaction.Date;
+                                                    uniqueformatteddate.FormattedValue = formattedDate;
+                                                    UniqueFormattedOtherDates.Add(uniqueformatteddate);
+
+                                                    <th style="
+                                                  font-family: 'Roboto', sans-serif;
+                                                  text-align: center;
+                                                  font-weight: 500;
+                                                  font-size: 9px;
+                                                  border-radius: 4px;
+                                                  background-color: #919191;
+                                                  color: #fff;
+                                                  white-space: nowrap;
+                                                ">
+                                                        @formattedDate
+                                                    </th>
+                                                }
                                             }
                                         }
                                     }
@@ -1154,17 +1279,21 @@
                         @*other data binding start*@
 
                         //updated data binding -sep 8
-                        @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] != "INCOME" &&
-                            gt.GroupType.Split("__")[0] != "EXPENSES" && gt.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0))
+                        @if (Model.GroupedTransactions != null && Model.GroupedTransactions.Count > 0)
                         {
-                            var splitGroupTypeName = groupedtransaction.GroupType.Replace("__", " ").Replace("_", " ");
-                            <tr>
-                                <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; 
-                                width:5% !important">@splitGroupTypeName</td>
+                            @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] != "INCOME" &&
+                            gt.GroupType.Split("__")[0] != "EXPENSES" && gt.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0))
+                            {
+                                var splitGroupTypeName = groupedtransaction.GroupType.Replace("__", " ").Replace("_", " ");
+                                <tr>
+                                    <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px;
+                                        width:5% !important">
+                                        @splitGroupTypeName
+                                    </td>
 
 
-                                @foreach (var headervalue in UniqueFormattedOtherDates)
-                                {
+                                    @foreach (var headervalue in UniqueFormattedOtherDates)
+                                    {
 
                                         var filteredData = from gad in (IEnumerable<dynamic>)groupedtransaction.GroupedAccountData
                                                            where gad.Transactions.Count > 0
@@ -1173,18 +1302,20 @@
                                                            select transaction;
 
 
-                                    float totalAmount = float.NaN;
-                                    if(@filteredData.Count() > 0){
+                                        float totalAmount = float.NaN;
+                                        if (@filteredData.Count() > 0)
+                                        {
 
-                                       totalAmount = (float)Math.Round((filteredData.Sum(z => (float)z.Amount)), 2);
+                                            totalAmount = (float)Math.Round(Convert.ToDecimal(filteredData.Sum(z => (float)z.Amount)), 2);
+                                        }
+
+                                        <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
+                                            @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
+                                        </td>
+
                                     }
-
-                                    <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
-                                        @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
-                                    </td>
-
-                                }
-                            </tr>
+                                </tr>
+                            }
                         }
                         //updated data binding - sep 8
 
@@ -1208,23 +1339,26 @@
                 </p>
             </td>
         </tr>
+
         <tr>
             <td colspan="2">
                 @*Income table start*@
                 <table class="calender-table" style="width: 100%; border-spacing: 5px;">
                     @{
                         List<HeaderResponse> UniqueFormattedIncomeDates = new List<HeaderResponse>();
-                        
+
                         //updated header -sep 8
                         <tr>
                             <th></th>
+                            @if (Model.GroupedTransactions != null && Model.GroupedTransactions.Count > 0)
+                            {
                             @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.StartsWith("INCOME") && gt.GroupedAccountData.Count > 0))
                             {
                                 foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
                                 {
                                     foreach (var transaction in groupedaccountdata.Transactions)
                                     {
-                                        if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, 
+                                        if (DateTime.TryParseExact(transaction.Date.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture,
                                         DateTimeStyles.None, out DateTime parsedDate)
                                         && UniqueFormattedIncomeDates.Count < 8)
                                         {
@@ -1243,40 +1377,44 @@
                                 }
                             }
 
-                            @{
+                            
                                 UniqueFormattedIncomeDates = UniqueFormattedIncomeDates.OrderBy(date => date.ActualValue).ToList();
                                 foreach (var incomeheader in UniqueFormattedIncomeDates)
                                 {
 
                                     <th style="
-                                                  font-family: 'Roboto', sans-serif;
-                                                  text-align: center;
-                                                  font-weight: 500;
-                                                  font-size: 9px;
-                                                  border-radius: 4px;
-                                                  background-color: #919191;
-                                                  color: #fff;
-                                                  white-space: nowrap;
-                                                ">
+                                                          font-family: 'Roboto', sans-serif;
+                                                          text-align: center;
+                                                          font-weight: 500;
+                                                          font-size: 9px;
+                                                          border-radius: 4px;
+                                                          background-color: #919191;
+                                                          color: #fff;
+                                                          white-space: nowrap;
+                                                        ">
                                         @incomeheader.FormattedValue
                                     </th>
                                 }
                             }
 
                         </tr>
-                        //updated header - sep8
+            //updated header - sep8
 
                         @*Income data binding start*@
 
                         //updated data binding - sep 8
 
+                        @if (Model.GroupedTransactions != null && Model.GroupedTransactions.Count > 0)
+                        {
                         @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] == "INCOME" && gt.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0))
                         {
                             var splitGroupTypeName = groupedtransaction.GroupType.Replace("__", " ").Replace("_", " ").Replace("INCOME", "");
                             <tr>
                                 <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px;
-                                   width:5% !important">@splitGroupTypeName</td>
-                                @foreach(var headervalue in UniqueFormattedIncomeDates)
+                                       width:5% !important">
+                                    @splitGroupTypeName
+                                </td>
+                                @foreach (var headervalue in UniqueFormattedIncomeDates)
                                 {
 
                                     var filteredData = from gad in (IEnumerable<dynamic>)groupedtransaction.GroupedAccountData
@@ -1289,16 +1427,17 @@
                                     float totalAmount = float.NaN;
                                     if (@filteredData.Count() > 0)
                                     {
-                                        totalAmount = (float)Math.Round((filteredData.Sum(z => (float)z.Amount)), 2);
+                                        totalAmount = (float)Math.Round(Convert.ToDecimal(filteredData.Sum(z => (float)z.Amount)), 2);
                                     }
 
 
-                                            <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
-                                                 @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
-                                                </td>
-                                    }
+                                    <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
+                                        @(filteredData.Count() > 0 ? (!float.IsNaN(totalAmount) ? $"${@totalAmount}" : "-") : "-")
+                                    </td>
+                                }
 
                             </tr>
+                        }
                         }
 
                         //updated data binding - sep 8
@@ -1321,6 +1460,7 @@
                 </p>
             </td>
         </tr>
+       
         <tr>
             <td colspan="2">
                 @*Expense table start*@
@@ -1331,6 +1471,8 @@
                         //updated header -sep 8
                         <tr>
                             <th></th>
+                            @if (Model.GroupedTransactions != null && Model.GroupedTransactions.Count > 0)
+                            {
                             @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.StartsWith("EXPENSES") && gt.GroupedAccountData.Count > 0))
                             {
                                 foreach (var groupedaccountdata in ((IEnumerable<dynamic>)groupedtransaction.GroupedAccountData).Where(gad => gad.Transactions.Count > 0))
@@ -1356,7 +1498,7 @@
                                 }
                             }
 
-                            @{
+                            
                             UniqueFormattedExpenseDates = UniqueFormattedExpenseDates.OrderBy(date => date.ActualValue).ToList();
                             @foreach (var expenseheader in UniqueFormattedExpenseDates)
                             {
@@ -1384,6 +1526,7 @@
                         @*Expense data bindng start*@
 
                         //updated data binding - sep 8
+                        @if (Model.GroupedTransactions != null && Model.GroupedTransactions.Count > 0){
                         @foreach (var groupedtransaction in ((IEnumerable<dynamic>)Model.GroupedTransactions).Where(gt => gt.GroupType.Split("__")[0] == "EXPENSES" 
                         && gt.GroupedAccountData.Count > 0 && UniqueFormattedDates.Count > 0))
                         {
@@ -1402,7 +1545,7 @@
                                     float totalAmount = float.NaN;
                                     if (@filteredData.Count() > 0)
                                     {
-                                        totalAmount = (float)Math.Round((filteredData.Sum(z => (float)z.Amount)), 2);
+                                        totalAmount = (float)Math.Round(Convert.ToDecimal(filteredData.Sum(z => (float)z.Amount)), 2);
                                     }
 
                                         <td style="font-family: 'Roboto', sans-serif; font-size: 9px; border-radius: 4px; border: 1.5px solid #ddd; padding: 5px 10px; white-space: nowrap; text-align: right;">
@@ -1411,7 +1554,9 @@
                                 }
                             </tr>
                         }
-                        //updated data binding  -sep 8
+                        }
+
+                        @*//updated data binding  -sep 8*@
                                                 
                         @*Expense data binding end*@
                     }

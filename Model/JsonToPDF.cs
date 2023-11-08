@@ -14,8 +14,8 @@ namespace JSON_To_PDF.Model
         public List<RecurrentItem>? RecurrentItems { get; set; }
         public List<CalendarMonthStatistic>? CalendarMonthStatistics { get; set; }
         public List<EmploymentData>? EmploymentData { get; set; }
-        public DateTime DateProcessed { get; set; }
-        public RentVerification RentVerification { get; set; }
+        public DateTime? DateProcessed { get; set; }
+        public RentVerification? RentVerification { get; set; }
     }
 
     public class Consumer

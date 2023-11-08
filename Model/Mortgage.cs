@@ -51,4 +51,31 @@
         public bool IsDeleted { get; set; }
 
     }
+
+    public class PaginationModel
+    {
+        //public int TotalRecords { get; set; }
+        //public int TotalPages { get; set; }
+        public int PageSize { get; set; }
+        public int CurrentPage { get; set; }
+        //public List<T> Data { get; set; }
+        public LoanFilterType LoanFilterType { get; set; }
+    }
+
+    public class LoanFilterType
+    {
+        public Dictionary<string, List<string>>? FilterType { get; set; }
+    }
+
+    //public class LoanFilter
+    //{
+    //    public List<string> LoanType { get; set; }
+    //    public double MinimumLoanAmount {  get; set;}
+    //    public double MaximumLoanAmount { get; set;}
+    //    public double MinimumResidualAmount { get; set; }
+    //    public double MaximumResidualAmount { get; set; }
+    //    public int FromRiki { get; set; }
+    //    public int ToRiki { get; set; }
+    //    public List<string> DownPaymentProgram { get; set; }
+    //}
 }

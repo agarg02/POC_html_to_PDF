@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.1" />
     <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="itext7" Version="8.0.1" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.1" />

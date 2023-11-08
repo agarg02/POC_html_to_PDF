@@ -80,7 +80,7 @@
                                 Borrower Report
                             </p>
                             <p style="margin:0;letter-spacing:1px;font-size:25px;color:#000;font-weight:600;font-family: 'Roboto', sans-serif;">
-                                @Model.Consumer?.FirstName @Model.Consumer?.LastName
+                                @(Model.Consumer != null ? $"{Model.Consumer?.FirstName} {Model.Consumer?.LastName}" : "N/A")
                             </p>
                         </td>
                         <td align="center" style="width:50%;padding:20px 0 20px 10px;text-align:left;">
@@ -98,7 +98,7 @@
                                         Report ID
                                     </td>
                                     <td style="padding: 8px 0 5px 0; font-size: 13px; font-family: 'Roboto', sans-serif;">
-                                        @Model.RequestedReportId
+                                        @(Model.RequestedReportId != null ? $"{Model.RequestedReportId}" : "N/A")
                                     </td>
                                 </tr>
                                 <tr>
@@ -106,7 +106,8 @@
                                         Report Date
                                     </td>
                                     <td style="padding:8px 0 5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
-                                        @Model.DateProcessed.ToShortDateString()
+                                        @(Model.DateProcessed != null ? $"{Model.DateProcessed.ToShortDateString()}" : "N/A")
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -114,7 +115,8 @@
                                         Email
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
-                                        @Model.Consumer?.Email[0]
+                                        @(Model.Consumer != null && Model.Consumer?.Email.Count > 0 ? $"{Model.Consumer?.Email[0]}" : "N/A")
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -122,7 +124,8 @@
                                         Phone Number
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
-                                        @Model.Consumer?.PhoneNumber
+                                        @(Model.Consumer != null ? $"{Model.Consumer?.PhoneNumber}" : "N/A")
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -130,10 +133,11 @@
                                         Address
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
-                                        @Model.Consumer?.Address?.Street
-                                        @Model.Consumer?.Address?.Street2
-                                        @Model.Consumer?.Address?.City, @Model.Consumer?.Address?.Region
-                                        @Model.Consumer?.Address?.Country, @Model.Consumer?.Address?.PostalCode
+
+                                        @(Model.Consumer != null ?
+                                            $"{Model.Consumer?.Address?.Street} {Model.Consumer?.Address?.Street2} {Model.Consumer?.Address?.City}, {Model.Consumer?.Address?.Region} {Model.Consumer?.Address?.Country}, {Model.Consumer?.Address?.PostalCode}" :
+                                            "N/A")
+
                                     </td>
                                 </tr>
                             </table>
@@ -163,7 +167,7 @@
                                     </td>
                                     <td style="padding:8px 0 5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
                                         <p style="">
-                                            @Model.RikiData?.RIKI
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.RIKI}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -186,7 +190,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;">
                                         <p>
-                                            @Model.RikiData?.CashFlowIndex
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.CashFlowIndex}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -196,13 +200,9 @@
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
                                         <p>
-                                            @*@(Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Up {@Model.RikiData?.CashFlowIndexTrend} points monthly" : 
-                                                $"Down {@Model.RikiData?.CashFlowIndexTrend} points monthly")*@
-                                       
-
-                                            @(float.IsNaN(Model.RikiData?.CashFlowIndexTrend) ? @Model.RikiData?.CashFlowIndexTrend : 
+                                            @(Model.RikiData != null ? (float.IsNaN(Model.RikiData?.CashFlowIndexTrend) ? @Model.RikiData?.CashFlowIndexTrend : 
                                                 (Model.RikiData?.CashFlowIndexTrend >= 0 ? $"Up {@Model.RikiData?.CashFlowIndexTrend} points monthly" :
-                                                    $"Down {@Model.RikiData?.CashFlowIndexTrend} points monthly")
+                                                    $"Down {@Model.RikiData?.CashFlowIndexTrend} points monthly")) : "N/A"
                                             )
 
                                         </p>
@@ -235,7 +235,7 @@
                                     </td>
                                     <td style="padding:8px 0 5px 0;font-size: 13px;font-family: 'Roboto', sans-serif;">
                                         <p class="table-sub-border">
-                                            $ @Model.RikiData?.TypicalMonthsTotalIncome
+                                            $ @(Model.RikiData != null ? $"{Model.RikiData?.TypicalMonthsTotalIncome}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -245,7 +245,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;">
                                         <p class="table-sub-border">
-                                            ($ @Model.RikiData?.TypicalMonthsAdjustedAvailableIncome)
+                                           ($ @(Model.RikiData != null ? $"{Model.RikiData?.TypicalMonthsAdjustedAvailableIncome}" : "N/A"))
                                         </p>
                                     </td>
                                 </tr>
@@ -268,7 +268,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;">
                                         <p class="table-sub-border">
-                                            @Model.RikiData?.MonthToMonthStabilityScore
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.MonthToMonthStabilityScore}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -279,7 +279,7 @@
                                     </td>
                                     <td style="padding:5px 0;font-size: 13px;">
                                         <p class="table-sub-border">
-                                            @Model.RikiData?.TotalMonthlyIncomeTrend
+                                            @(Model.RikiData != null ? $"{Model.RikiData?.TotalMonthlyIncomeTrend}" : "N/A")
                                         </p>
                                     </td>
                                 </tr>
@@ -353,7 +353,7 @@
                                 </td>
                                 <td style="padding:8px 0 5px 0;font-size:11px;">
                                     <p class="table-sub-border">
-                                        @Model.EmploymentData[0].EmployerName
+                                        @(Model.EmploymentData != null && Model.EmploymentData.Count > 0 ? $"{Model.EmploymentData[0]?.EmployerName}" : "N/A")
                                     </p>
                                 </td>
                             </tr>
@@ -364,7 +364,8 @@
                                 </td>
                                 <td style="padding:5px 0;font-size: 11px;">
                                     <p class="table-sub-border">
-                                        @Model.EmploymentData[0].MostRecentDepositDate.ToShortDateString()
+                                        @(Model.EmploymentData != null && Model.EmploymentData.Count > 0 ? $"{Model.EmploymentData[0].MostRecentDepositDate.ToShortDateString()}" : "N/A")
+
                                     </p>
                                 </td>
                             </tr>
@@ -375,7 +376,8 @@
                                 </td>
                                 <td style="padding:5px 0;font-size: 11px;">
                                     <p class="table-sub-border">
-                                        @Model.EmploymentData[0].MostRecentDepositAmount
+                                        @(Model.EmploymentData != null && Model.EmploymentData.Count > 0 ? $"{Model.EmploymentData[0].MostRecentDepositAmount}" : "N/A")
+
                                     </p>
                                 </td>
                             </tr>
@@ -385,7 +387,8 @@
                                 </td>
                                 <td style="padding:5px 0;font-size: 11px;">
                                     <p class="table-sub-border">
-                                        @Model.EmploymentData[0].PayFrequency
+                                        @(Model.EmploymentData != null && Model.EmploymentData.Count > 0 ? $"{Model.EmploymentData[0].PayFrequency}" : "N/A")
+
                                     </p>
                                 </td>
                             </tr>
@@ -434,7 +437,7 @@
                             <td style="padding:12px 0 8px;">
                                 <p style="color:#666;font-size: 13px;margin:0;font-family: 'Roboto', sans-serif;">
 
-                                    @if (@Model.GroupedTransactions.Count > 0 && @Model.GroupedTransactions != null)
+                                    @if (@Model.GroupedTransactions != null && @Model.GroupedTransactions.Count > 0)
                                     {
 
                                         firstDirectDate = ((IEnumerable<dynamic>)Model.GroupedTransactions)
@@ -486,16 +489,16 @@
                                     background-color:#919191;color:#fff;font-size: 13px;">Amount</th>
                                     </tr>
                          
-                                    @if (@Model.GroupedTransactions.Count > 0 && @Model.GroupedTransactions != null)
+                                    @if (@Model.GroupedTransactions != null && @Model.GroupedTransactions.Count > 0)
                                     {
                                         List<DepositeTransaction> depositTransactionList = new List<DepositeTransaction>();
                                         @foreach (var grouptransaction in @Model.GroupedTransactions)
                                         {
-                                            @if (@grouptransaction.GroupedAccountData.Count > 0 && @grouptransaction.GroupedAccountData != null)
+                                            @if (@grouptransaction.GroupedAccountData != null && @grouptransaction.GroupedAccountData.Count > 0)
                                             {
                                                 @foreach (var groupaccountdata in grouptransaction.GroupedAccountData)
                                                 {
-                                                    @if (@groupaccountdata.Transactions.Count > 0 && @groupaccountdata.Transactions != null)
+                                                    @if (@groupaccountdata.Transactions != null && @groupaccountdata.Transactions.Count > 0)
                                                     {
                                                         @foreach (var transaction in @groupaccountdata.Transactions)
                                                         {
@@ -516,29 +519,33 @@
 
                                         //start itrate depositeTransactionList and show to table
 
-                                        var sortedDepositTransactions = depositTransactionList.OrderByDescending(transaction => transaction.Date);
-
-                                        @foreach (var filtertransaction in sortedDepositTransactions)
+                                        @if (depositTransactionList.Count > 0)
                                         {
 
-                                            <tr>
-                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                            var sortedDepositTransactions = depositTransactionList.OrderByDescending(transaction => transaction.Date);
+
+                                            @foreach (var filtertransaction in sortedDepositTransactions)
+                                            {
+
+                                                <tr>
+                                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                                                     border:1.5px solid #ddd;padding:5px 10px;">
-                                                    @filtertransaction.Date.ToShortDateString()
-                                                </td>
-                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                        @filtertransaction.Date.ToShortDateString()
+                                                    </td>
+                                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                                                     border:1.5px solid #ddd;padding:5px 10px;">
-                                                    @filtertransaction.AccountNumber
-                                                </td>
-                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                        @filtertransaction.AccountNumber
+                                                    </td>
+                                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                                                     border:1.5px solid #ddd;padding:5px 10px;">
-                                                    @filtertransaction.Description
-                                                </td>
-                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                        @filtertransaction.Description
+                                                    </td>
+                                                    <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                                                     border:1.5px solid #ddd;padding:5px 10px;">
-                                                    $ @filtertransaction.Amount
-                                                </td>
-                                            </tr>
+                                                        $ @filtertransaction.Amount
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
 
                                     //end itrate depositeTransactionList and show to table
@@ -770,16 +777,16 @@
                                 </tr>
 
 
-                                @if (@Model.GroupedTransactions.Count > 0 && @Model.GroupedTransactions != null)
+                                @if (@Model.GroupedTransactions != null && @Model.GroupedTransactions.Count > 0)
                                 {
                                     List<DepositeTransaction> depositTransactionList = new List<DepositeTransaction>();
                                     @foreach (var grouptransaction in @Model.GroupedTransactions)
                                     {
-                                        @if (@grouptransaction.GroupedAccountData.Count > 0 && @grouptransaction.GroupedAccountData != null)
+                                        @if (@grouptransaction.GroupedAccountData != null && @grouptransaction.GroupedAccountData.Count > 0)
                                         {
                                             @foreach (var groupaccountdata in grouptransaction.GroupedAccountData)
                                             {
-                                                @if (@groupaccountdata.Transactions.Count > 0 && @groupaccountdata.Transactions != null)
+                                                @if (@groupaccountdata.Transactions != null && @groupaccountdata.Transactions.Count > 0)
                                                 {
                                                     @foreach (var transaction in @groupaccountdata.Transactions)
                                                     {
@@ -796,49 +803,51 @@
                                     }
 
                                     //start itrate depositeTransactionList and show to table
-
-                                    var sortedDepositTransactions = depositTransactionList.OrderByDescending(transaction => transaction.Date);
-
-                                    @foreach (var filtertransaction in sortedDepositTransactions)
+                                    @if (depositTransactionList.Count > 0)
                                     {
+                                        var sortedDepositTransactions = depositTransactionList.OrderByDescending(transaction => transaction.Date);
 
-                              
+                                        @foreach (var filtertransaction in sortedDepositTransactions)
+                                        {
 
-                                        <tr>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+
+
+                                            <tr>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                                     border:1.5px solid #ddd;padding:5px 10px;">
                                                     @filtertransaction.Date.ToShortDateString()
-                                            </td>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                </td>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                             border:1.5px solid #ddd;padding:5px 10px;">
                                                     @filtertransaction.Description
-                                            </td>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                </td>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                             border:1.5px solid #ddd;padding:5px 10px;">
-                                                N/A
-                                            </td>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                    N/A
+                                                </td>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                             border:1.5px solid #ddd;padding:5px 10px;">
                                                     @filtertransaction.AccountNumber
-                                            </td>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                </td>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                             border:1.5px solid #ddd;padding:5px 10px;">
-                                                N/A
-                                            </td>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                    N/A
+                                                </td>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                             border:1.5px solid #ddd;padding:5px 10px;">
-                                                $ @filtertransaction.Amount
-                                            </td>
-                                            <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
+                                                    $ @filtertransaction.Amount
+                                                </td>
+                                                <td style="font-family: 'Roboto', sans-serif;font-size: 13px;border-radius: 4px;
                             border:1.5px solid #ddd;padding:5px 10px;">
-                                                N/A
-                                            </td>
-                                        </tr>
+                                                    N/A
+                                                </td>
+                                            </tr>
 
 
-                                            
+
+                                        }
+
                                     }
-
                                     //end itrate depositeTransactionList and show to table
                                 }
 

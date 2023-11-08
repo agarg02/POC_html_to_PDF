@@ -1,7 +1,9 @@
-﻿using JSON_To_PDF.Model;
+﻿using iText.Kernel.Geom;
+using JSON_To_PDF.Model;
 using JSON_To_PDF.Repository.Interfaces;
 using JSON_To_PDF.Validators.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Utilities;
 using System;
 
 namespace JSON_To_PDF.Controllers
@@ -96,18 +98,29 @@ namespace JSON_To_PDF.Controllers
 
 
         #region
-        [HttpGet]
+        [HttpPost]
         [Route("getLoanList")]
-        public async Task<IActionResult> GetLoanList(int page , int pageSize )
+        public ActionResult<List<Loan>> GetLoanList(PaginationModel paginationModel)
         {
             try
             {
-                if (page > 0 && pageSize > 0)
+                var responsePaginationModel = new PaginationModel();
+                var loanDetails = new List<Loan>();
+                if (paginationModel.CurrentPage > 0 && paginationModel.PageSize > 0)
                 {
-                    var loanDeatils = _mortgageRepository.GetLoanData(page, pageSize);
-                    return Ok(loanDeatils); 
+                    loanDetails = _mortgageRepository.GetLoanData(paginationModel);
+                    responsePaginationModel = new PaginationModel
+                    {
+                        //TotalRecords = loanDetails.Count(),
+                        //TotalPages =  (int)Math.Ceiling((double)loanDetails.Count() / paginationModel.PageSize),
+                        PageSize = paginationModel.PageSize,
+                        CurrentPage = paginationModel.CurrentPage,
+                        //Data = loanDetails
+                    };
+
                 }
-                return null;
+                return loanDetails;
+
             }
             catch (Exception exception)
             {
@@ -117,13 +130,13 @@ namespace JSON_To_PDF.Controllers
 
         [HttpDelete]
         [Route("deleteLoanRecord")]
-        public async Task<IActionResult> DeleteLoanRecord(int loanid)
+        public async Task<IActionResult> DeleteLoanRecord(int loanid, int userid)
         {
             try
             {
                 if(loanid > 0)
                 {
-                  bool deletedStatus =  _mortgageRepository.DeleteLoanRecordById(loanid);
+                  bool deletedStatus =  _mortgageRepository.DeleteLoanRecordById(loanid, userid);
                     if (deletedStatus)
                     {
                         return Ok("Deleted Successfully");

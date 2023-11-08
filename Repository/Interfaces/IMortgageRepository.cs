@@ -12,8 +12,8 @@ namespace JSON_To_PDF.Repository.Interfaces
 
         public EmployeeBankDetail GetBankDetailByEmployeeId(string employerId);
 
-        public Loan GetLoanData(int page, int pagesize);
-        public bool DeleteLoanRecordById(int loanId);
+        public List<Loan> GetLoanData(PaginationModel paginationModel);
+        public bool DeleteLoanRecordById(int loanId, int userId);
 
     }
 }
